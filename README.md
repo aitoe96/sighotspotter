@@ -1,5 +1,4 @@
 ## About
----
 
 A key goal of regenerative medicine is to restore structure and function of damaged tissues and organs due to disease and ageing. Despite recent advances, the identification of key factors for efficient control of cell phenotype to enable cellular rejuvenation is still a challenge. 
 Several computational methods have been useful in designing cellular conversion strategies, however, they mainly rely on gene regulatory network (GRN) models without accounting for the cellular microenvironment (niche), which is important for maintenance of in vivo cellular phenotype.
@@ -7,7 +6,6 @@ Our main assumption here is that a cellular phenotype is maintained by the susta
 Application of NicheSIG on several niche dependent cellular systems correctly predicted known niche induced signaling molecules. Importantly, NicheSIG outperforms commonly employed signaling pathway enrichment/inference methods
 
 ### Authors
----
 
 This software was developed in the [Computational Biology Group] (https://wwwfr.uni.lu/lcsb/research/computational_biology) by
 - [Srikanth Ravichandran](https://wwwen.uni.lu/lcsb/people/srikanth_ravichandran)
@@ -15,7 +13,8 @@ This software was developed in the [Computational Biology Group] (https://wwwfr.
 - [Antonio del Sol](https://wwwfr.uni.lu/lcsb/people/antonio_del_sol_mesa)
 
 ## Documentation
----
+
+
 ### File formats
 
 
@@ -32,9 +31,9 @@ See an example dataset
 Click on the "Take a tour" button for walkthrough.
 
 ## Use
----
 
-The NicheSIG web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
+
+The [NicheSIG](https://nichesig.lcsb.uni.lu/webapp/)  web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
 For commercial use, please contact the authors for a license.
 Using the SOFTWARE means you accept the terms and conditions of the Disclaimer below.
 
