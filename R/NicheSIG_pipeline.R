@@ -1,16 +1,15 @@
-#TODO: documentation
-#!/usr/bin/env Rscript
-##Script to extract the percent expressed cell and sum of product of expression betwen source and target nodes
-# oarsub -l nodes=1/core=1,walltime=65:00:00 'source /etc/profile; module load lang/R/3.4.0-intel-2017a-X11-20170314-bare; Rscript MCSD_06022018.R OD_old.txt'
-#USAGE: Rscript MCSD_06022018.R <input_data> <signaling_interactome> <cutoff for minimum no. of cell in which two gene must be expressed> <Number of random networks>
-
-##  Read INPUT files
-#args = commandArgs(trailing = TRUE)
-#input_data = args[1]
-#cutoff = args[2]
-#DE_Genes_data = args[3]
-#percentile = args[4]
-
+#' General pipeline for NicheSIG
+#'
+#' The function computes compatibility scores for signaling intermediates
+#'
+#' @param species Currently supported species: "HUMAN", "MOUSE"
+#' @param input_data File name for input gene expression data
+#' @param cutoff Maximum number of zero-value genes, above this cutoff the genes are excluded
+#' @param DE_Genes_data Differential expression dataset (1 for up-regulated, -1 for down-regulated genes)
+#' @param percentile Predicted intermediates are taken into account above this threshold
+#' @param invert_DE If the differential expression should be inverted, default = FALSE
+#' @param showprogress shows progress bar if TRUE, set it to FALSE in batch mode, default = TRUE
+#' @return Compatibility scores
 
 NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percentile, invert_DE = FALSE, showprogress = TRUE)
 {
@@ -21,8 +20,8 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
   library(Matrix)
   library(reshape2)
   library(parallel)
-  #load("HUMAN_Background_Network.RData")
-  #TODO: load correct dataset
+
+  #To load correct dataset
   if(species == "MOUSE"){
     load(system.file("extdata", "MOUSE_Background_Network.RData", package = "NicheSIG"))
   } else {
