@@ -1,0 +1,21 @@
+Package: NicheSIG
+Type: Package
+Title: Markov Chain for Cell Signaling Cascade Inference
+Version: 0.3.4
+Author: Srikanth RAVICHANDRAN, Andras HARTMANN
+Maintainer: Srikanth RAVICHANDRAN <srikanth.ravichandran@uni.lu>
+Description: This package introduces a novel approach to infer the effect of the cellular environment (niche) on the cell signaling cascade
+License: AGPL v3
+Encoding: UTF-8
+LazyData: true
+Imports: 
+	plyr,
+	igraph,
+	Matrix,
+	shiny,
+	DT,
+	shinyjs,
+	shinythemes,
+	shinyBS,
+	rintrojs,
+	markdown

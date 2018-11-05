@@ -1,0 +1,34 @@
+.footer {
+	text-align: center;
+	 padding-top: 10px;
+}
+
+.site-header {
+	top: 0px;
+	border-width: 0px 0px 1px;
+	position: fixed;
+	right: 0px;
+	left: 0px;
+	z-index: 1030;
+}
+
+body {
+	padding-top: 10px;
+	padding-bottom: 130px;
+}
+
+.carousel-inner > .item > img {
+	margin: 0 auto;
+}
+
+.header-image {
+	display:block;
+	max-width:100%;
+	height:auto;
+	border: 10px solid transparent;
+}
+
+.rightAlign{float:right;}
+
+.centerAlign{margin: auto;}
+
