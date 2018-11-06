@@ -13,7 +13,7 @@
 
 NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percentile, invert_DE = FALSE, showprogress = TRUE)
 {
-  ## Load necessary libraries
+  ## Import necessary libraries
   library(NicheSIG)
   library(plyr)
   library(igraph)
@@ -21,7 +21,7 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
   library(reshape2)
   library(parallel)
 
-  #To load correct dataset
+  ## Choose correct dataset according to species
   if(species == "MOUSE"){
     load(system.file("extdata", "MOUSE_Background_Network.RData", package = "NicheSIG"))
   } else {
@@ -32,6 +32,7 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
     }
   }
 
+  ## Load the data
   if(showprogress){
     incProgress()
     setProgress(detail = "Loading data")
@@ -44,6 +45,7 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
     DE_Genes[,2] = -DE_Genes[,2]
   }
 
+  ## Preprocessing the data
   if(showprogress){
     incProgress()
     setProgress(detail = "Preprocessing")
@@ -51,15 +53,19 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
 
   subg=Data_preprocessing(idata,cutoff,species)
 
-  Steady_state_true=Markov_chain_stationary_distribution(subg)
-  #out2_3=paste("SS_R_",args[1],"_",cutoff,".txt",sep="")
-  #write.table(Steady_state_true,out2_3,sep="\t",row.names=FALSE)
-
+  ## Calculate stationary distribution of the MC
   if(showprogress){
     incProgress()
     setProgress(detail = "Steady state calculation")
   }
 
+  Steady_state_true=Markov_chain_stationary_distribution(subg)
+
+  # Uncomment the following for debug
+  #out2_3=paste("SS_R_",args[1],"_",cutoff,".txt",sep="")
+  #write.table(Steady_state_true,out2_3,sep="\t",row.names=FALSE)
+
+  ## Retrieves high probability intermediates
   int=high_probability_intermediates(Steady_state_true, intermediates, percentile)
 
   if(showprogress){
@@ -71,10 +77,12 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
 
   nTF=nonterminal_DE_TFs(gintg,DE_Genes,non_interface_TFs)
 
+  ## Computing compatibility scores
   if(showprogress){
     incProgress()
-    setProgress(detail = "Markov chain")
+    setProgress(detail = "Compatibility scores")
   }
+
   #comp score in serial
   comp_score=lapply(int,spcal_path_weight,nTF,gintg)
   #Compatability_score=unlist(comp_score)
@@ -83,10 +91,6 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
   #comp_score1=join(comp_score1,Steady_state_true,by=c("Gene"),type="inner",match="first")
   #comp_score1=comp_score1[order(comp_score1$Compatability_Score,decreasing = TRUE),]
 
-  if(showprogress){
-    incProgress()
-    setProgress(detail = "Compatibility scores")
-  }
   comp_score1=compatability_score(comp_score,Steady_state_true,int)
 #  out_CS=paste("compatability_score_",args[1],sep="")
 #  out_SS=paste("Steady_state_",args[1],sep="")
