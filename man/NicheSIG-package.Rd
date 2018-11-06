@@ -11,3 +11,17 @@ This package introduces a Markov Chain Model for Cell Signaling Cascade Inferenc
 \details{
 For more information see the paper "A computational approach to control cell phenotype for cellular rejuvenation strategies"
 }
+\author{
+\strong{Maintainer}: Srikanth Ravichandran \email{srikanth.ravichandran@uni.lu}
+
+Authors:
+\itemize{
+  \item Andras Hartmann \email{andras.hartmann@gmail.com}
+}
+
+Other contributors:
+\itemize{
+  \item Antonio del Sol [funder]
+}
+
+}
