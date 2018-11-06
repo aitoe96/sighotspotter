@@ -10,7 +10,7 @@
 #' @param invert_DE If the differential expression should be inverted, default = FALSE
 #' @param showprogress shows progress bar if TRUE, set it to FALSE in batch mode, default = TRUE
 #' @return Compatibility scores
-
+#' @export
 NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percentile, invert_DE = FALSE, showprogress = TRUE)
 {
   ## Import necessary libraries
