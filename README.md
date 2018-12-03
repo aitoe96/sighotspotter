@@ -1,9 +1,11 @@
+# NicheSIG
+
 ## About
 
 A key goal of regenerative medicine is to restore structure and function of damaged tissues and organs due to disease and ageing. Despite recent advances, the identification of key factors for efficient control of cell phenotype to enable cellular rejuvenation is still a challenge. 
 Several computational methods have been useful in designing cellular conversion strategies, however, they mainly rely on gene regulatory network (GRN) models without accounting for the cellular microenvironment (niche), which is important for maintenance of in vivo cellular phenotype.
-Our main assumption here is that a cellular phenotype is maintained by the sustained effect of the niche via key signaling molecules. Accordingly, we propose a probabilistic method (NicheSIG) to identify such signaling molecules by integrating signaling and transcriptional networks.
-Application of NicheSIG on several niche dependent cellular systems correctly predicted known niche induced signaling molecules. Importantly, NicheSIG outperforms commonly employed signaling pathway enrichment/inference methods
+Our main assumption here is that a cellular phenotype is maintained by the sustained effect of the niche via key signaling molecules. Accordingly, we propose a probabilistic method `NicheSIG` to identify such signaling molecules by integrating signaling and transcriptional networks.
+Application of NicheSIG on several niche dependent cellular systems correctly predicted known niche induced signaling molecules. Importantly, NicheSIG outperforms commonly employed signaling pathway enrichment/inference methods.
 
 ### Authors
 
@@ -12,10 +14,40 @@ This software was developed in the [Computational Biology Group] (https://wwwfr.
 - [Andras Hartmann](https://wwwfr.uni.lu/lcsb/people/andras_hartmann)
 - [Antonio del Sol](https://wwwfr.uni.lu/lcsb/people/antonio_del_sol_mesa)
 
-## Documentation
+## System requirements 
+### Hardware requirements
+The `NicheSIG` package requires only a standard PC, for optimal performance, at least 8 GB of RAM and 4 cores of 2.5 GHz each (or above) are recommended.
 
+### Software dependencies
+The package supports linux, mac and windows operating systems, tested platforms, and requires `R` version 3.2.3 or later
+- linux: Ubuntu 16.04 TLS / R 3.2.3
+- mac: macOS Sierra version: 10.12.6 / R 3.4.1
+- Windows 7 / R 3.4.1
 
-### File formats
+## Installation guide (linux/unix)
+To clone the repository you can use 
+```bash
+$ git clone https://gitlab.uni.lu/sravichandran/nichesig.git
+```
+```bash
+$ cd /tmp
+$ wget https://webdav-r3lab.uni.lu/public/cbg/NicheSIG/source/NicheSIG.zip
+$ unzip NicheSIG.zip
+```
+
+Then you can install the package from the source in `R`.
+
+```R
+> install.packages('/tmp/nichesig-master', repos = NULL, type="source")
+```
+Takes about 2 seconds to install.
+
+```R
+install.packages(c("plyr","igraph","Matrix","shiny","DT","shinyjs","shinythemes","shinyBS","rintrojs","markdown"))
+```
+Takes about 10 seconds to install.
+
+### Input file formats
 
 
 The required input of NicheSIG are tab separated value files. 
@@ -25,17 +57,18 @@ Rows represent genes labeled with gene symbols, and columns represent replicates
 See an example dataset
 <a href="https://webdav-r3lab.uni.lu/public/cbg/NicheSIG/data/NicheSIG_datasets.zip" target="_blank">here</a>.
 
+
+## Web interface
+
+
+The [NicheSIG](https://nichesig.lcsb.uni.lu/webapp/) web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
+For commercial use, please contact the authors for a license.
+Using the SOFTWARE means you accept the terms and conditions of the Disclaimer below.
+
 ### Application walkthrough
 
 
 Click on the "Take a tour" button for walkthrough.
-
-## Use
-
-
-The [NicheSIG](https://nichesig.lcsb.uni.lu/webapp/)  web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
-For commercial use, please contact the authors for a license.
-Using the SOFTWARE means you accept the terms and conditions of the Disclaimer below.
 
 
 ### Disclaimer
