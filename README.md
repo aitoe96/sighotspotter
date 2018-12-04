@@ -23,32 +23,32 @@ The package supports linux, mac and windows operating systems, tested platforms,
 - linux: Ubuntu 16.04 TLS / R 3.2.3
 - mac: macOS Sierra version: 10.12.6 / R 3.4.1
 - Windows 7 / R 3.4.1
+- Windows 10 / R 3.4.3
+
+Running the interface locally requires `RStudio`, we suggest to use the latest build (RStudio Desktop 1.1.463)
 
 ## Installation guide (linux/unix)
-To clone the repository you can use 
-```bash
-$ git clone https://gitlab.uni.lu/sravichandran/nichesig.git
-```
-```bash
-$ cd /tmp
-$ wget https://webdav-r3lab.uni.lu/public/cbg/NicheSIG/source/NicheSIG.zip
-$ unzip NicheSIG.zip
-```
-
-Then you can install the package from the source in `R`.
+From an `RStudio` terminal, type: 
 
 ```R
-> install.packages('/tmp/nichesig-master', repos = NULL, type="source")
-```
-Takes about 2 seconds to install.
+require("devtools")
+install_git("https://gitlab.uni.lu/sravichandran/nichesig.git")
+```R
+
+This will install all the package dependencies as well as the NicheSIG package, it should take about 3 minutes.
+
+### Running the interface locally
+
+From rstudio
+From an `RStudio` terminal, type: 
 
 ```R
-install.packages(c("plyr","igraph","Matrix","shiny","DT","shinyjs","shinythemes","shinyBS","rintrojs","markdown"))
+shiny::runApp(paste(find.package("NicheSIG"), "webapp", "app.R", sep = .Platform$file.sep))
 ```
-Takes about 10 seconds to install.
 
-### Input file formats
+This will open the graphical user interface locally
 
+## Input file formats
 
 The required input of NicheSIG are tab separated value files. 
 - The files for condition 1 and condition 2 shall contain gene expression data (normalized bulk or single-cell measurements).
