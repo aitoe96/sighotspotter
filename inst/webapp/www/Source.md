@@ -5,5 +5,5 @@ NicheSIG was developed in R statistical language. The package source code is ava
 <a href="https://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank">Affero GPL license v3</a>.
 
 
-- Download a current snapshot of the <a href="https://webdav-r3lab.uni.lu/public/cbg/NicheSIG/source/NicheSIG.zip" target="_blank">code</a>.
+- Download a current snapshot of the code is available in the <a href="https://gitlab.uni.lu/sravichandran/nichesig" target="_blank">git repository</a>.
 - Download the <a href="https://webdav-r3lab.uni.lu/public/cbg/NicheSIG/data/NicheSIG_datasets.zip" target="_blank">test dataset</a>.
