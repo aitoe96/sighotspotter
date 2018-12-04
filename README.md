@@ -9,7 +9,7 @@ Application of NicheSIG on several niche dependent cellular systems correctly pr
 
 ### Authors
 
-This software was developed in the [Computational Biology Group] (https://wwwfr.uni.lu/lcsb/research/computational_biology) by
+This software was developed in the [Computational Biology Group](https://wwwfr.uni.lu/lcsb/research/computational_biology) by
 - [Srikanth Ravichandran](https://wwwen.uni.lu/lcsb/people/srikanth_ravichandran)
 - [Andras Hartmann](https://wwwfr.uni.lu/lcsb/people/andras_hartmann)
 - [Antonio del Sol](https://wwwfr.uni.lu/lcsb/people/antonio_del_sol_mesa)
@@ -34,7 +34,11 @@ install_git("https://gitlab.uni.lu/sravichandran/nichesig.git")
 ```
 
 This will install all the package dependencies as well as the NicheSIG package, it takes about 3 minutes.
-
+If the install would fail because the dependencies can not be installed, you can install the dependencies before installing the package by typing:
+```R
+install.packages(c("plyr","igraph","Matrix","shiny","DT","shinyjs","shinythemes","shinyBS","rintrojs","markdown"))
+```
+Takes about 3 minutes to install.
 
 
 ## Instruction to use
