@@ -107,9 +107,11 @@ analysis_page <- fluidPage(
     # verbatimTextOutput('result_summary'),
     #fluidRow(
       column(5, h3(textOutput('titleText1', inline=TRUE))),
-      column(9, class="centerAlign", DT::dataTableOutput("results1")),
+      column(9, class="centerAlign", DT::dataTableOutput("results1_active")),
+      column(9, class="centerAlign", DT::dataTableOutput("results1_inactive")),
       column(5, h3(textOutput('titleText2', inline=TRUE))),
-      column(9, class="centerAlign", DT::dataTableOutput("results2"))
+      column(9, class="centerAlign", DT::dataTableOutput("results2_active")),
+      column(9, class="centerAlign", DT::dataTableOutput("results2_inactive"))
     #)
 
   )
@@ -166,6 +168,25 @@ ui <- shinyUI(
   } else {
     shinyjs::enable("button")
   }
+}
+
+#################################
+## Function to trim results for display
+#################################
+.trimResults <- function(results, active = TRUE) {
+
+  res_trimmed = results[,1:2]
+  if (active){
+    res_trimmed <- head(res_trimmed, 10L)
+    colnames(res_trimmed) <- c('Active signaling hotspots', 'Compatibility score')
+  } else
+  {
+    res_trimmed <- tail(res_trimmed, 10L)
+    colnames(res_trimmed) <- c('Inactive signaling hotspots', 'Compatibility score')
+  }
+  res_trimmed[,2] = round(res_trimmed[,2],4)
+  rownames(res_trimmed) <- NULL
+  return(res_trimmed)
 }
 
 #################################
@@ -273,10 +294,12 @@ server <- function(input, output, session) {
           withProgress(message = 'Condition 1',  {
 
             res1 = NicheSIG_pipeline (input$species, rv$cond1_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = FALSE)
-            res1[,2:3] = round(res1[,2:3],4)
-            rownames(res1) <- NULL
-            output$results1 <- DT::renderDataTable({
-              res1
+            output$results1_active <- DT::renderDataTable({
+              .trimResults(res1, active = TRUE)
+            },server = TRUE, selection = "single")
+
+            output$results1_inactive <- DT::renderDataTable({
+              .trimResults(res1, active = FALSE)
             },server = TRUE, selection = "single")
           })
 
@@ -286,10 +309,12 @@ server <- function(input, output, session) {
 
           withProgress(message = 'Condition 2',  {
             res2= NicheSIG_pipeline (input$species, rv$cond2_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = TRUE)
-            res2[,2:3] = round(res2[,2:3],4)
-            rownames(res2) <- NULL
-            output$results2 <- DT::renderDataTable({
-              res2
+            output$results2_active <- DT::renderDataTable({
+              .trimResults(res2, active = TRUE)
+            },server = TRUE, selection = "single")
+
+            output$results2_inactive <- DT::renderDataTable({
+              .trimResults(res2, active = FALSE)
             },server = TRUE, selection = "single")
           })
 
