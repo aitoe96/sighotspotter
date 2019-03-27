@@ -47,7 +47,7 @@ Data_preprocessing <- function(input_data,cutoff,species)
   #write.table(g3,out, sep="\t",row.names=FALSE)
   ######NETWORK preprocessing
   g <- graph.data.frame(as.data.frame(g3))
-  g=simplify(g,edge.attr.comb=list("first"))
+  #g=simplify(g,edge.attr.comb=list("first"))
   #DELETE those edges whoese sum is zero
   #del=E(g)[V3==0]
   #DELETE those edges whoese sum is zero (V3) OR whose average expression is lessthan args(3) (V4)
@@ -82,6 +82,7 @@ Data_preprocessing <- function(input_data,cutoff,species)
   #g=l[[1]]
   SCC <- clusters(g, mode="strong")
   subg <- induced.subgraph(g, which(membership(SCC) == which.max(sizes(SCC))))
+  subg=simplify(subg,edge.attr.comb=list("first"))
   subg
 }
 
@@ -99,12 +100,16 @@ Markov_chain_stationary_distribution <- function(subg) #The function takes the e
   #write.table(myMatrix,"matrix.txt",sep="\t")
   #print(myMatrix)
   ##Eigen value of the sparse matrix
-  ev=eigen(Matrix::t(myMatrix))
+  #ev=eigen(Matrix::t(myMatrix))
+  ##eigen value by Rspectra package
+  el=eigs(t(myMatrix),1,which="LR")
   ##eigen value that matches 1
   #match(1.0000,Re(round(ev$values, digits = 5)))
-  col=which.min(abs(ev$values - 1.00000000))
+  #col=which.min(abs(ev$values - 1.00000000))
   ##STATIONARY DISTRIBUTION
-  SD=(abs(ev$vectors[,col]))/sum(abs(ev$vectors[,col]))
+  #SD=(abs(ev$vectors[,col]))/sum(abs(ev$vectors[,col]))
+  #Stationary distribution from Rspectra eigen vectors
+  SD=(abs(el$vectors))/sum(abs(el$vectors))
   SD=as.data.frame(SD)
   SD
   SD=cbind((as.data.frame(V(subg)$name)),SD)
@@ -173,8 +178,17 @@ integrate_sig_TF <- function(g,x,deg, non_interface_TFs, TF_TF_interactions )
   g3 <- graph.data.frame(as.data.frame(graph_markov))
   #updating the graph attribute for the adjacency matrix i.e. product SS (weight) and effect
   E(g3)$weight=E(g3)$weight*E(g3)$Effect
-  #SCC <- clusters(g, mode="strong")
-  #g3 <- induced.subgraph(g3, which(membership(SCC) == which.max(sizes(SCC))))
+  #deleting TF nodes with no indegree
+  V(g3)$degree=igraph::degree(g3, v=V(g3), mode = c("in"))
+  #Select Nodes to be deleted
+  del=V(g3)[degree==0]
+  #delete vertices from graph
+  while(length(del)!=0)
+  {
+    g3 <- delete.vertices(g3,del)
+    V(g3)$degree=igraph::degree(g3, v=V(g3), mode = c("in"))
+    del=V(g3)[degree==0]
+  }
   g3
 }
 
@@ -260,6 +274,11 @@ weight_probability <- function(x)
   #probability of the intermediate to be compatible: closer to 1 more compatible it is and closer t zero more incompatible it is
   #p_neg=sum(x_neg)/x_tot
   p_pos=sum(x_pos)/x_tot
+}
+
+comp_score_tf <- function(t,s,g) #x is a list of comp score
+{
+  comp_score=lapply(s,spcal_path_weight,t,g)
 }
 
 compatability_score <- function(x,y,int) #where x is compatability score as list and y is steady state
