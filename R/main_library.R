@@ -99,7 +99,7 @@ Markov_chain_stationary_distribution <- function(subg) #The function takes the e
   ##Eigen value of the sparse matrix
   #ev=eigen(Matrix::t(myMatrix))
   ##eigen value by Rspectra package
-  el=eigs(t(myMatrix),1,which="LR")
+  el=eigs(Matrix::t(myMatrix),1,which="LR")
   ##eigen value that matches 1
   #match(1.0000,Re(round(ev$values, digits = 5)))
   #col=which.min(abs(ev$values - 1.00000000))
