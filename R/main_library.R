@@ -1,13 +1,10 @@
 Data_preprocessing <- function(input_data,cutoff,species)
 {
-  #b = read.table(input_data,header=TRUE,stringsAsFactors=FALSE,quote="")
-  #load("MOUSE_Background_Network.RData")
-  #load(system.file("extdata", "Mouse_background_network.RData", package = "NicheSIG"))
   if(species == "MOUSE"){
-    load(system.file("extdata", "MOUSE_Background_Network.RData", package = "NicheSIG"))
+    load(system.file("extdata", "MOUSE_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "NicheSIG"))
   } else {
     if(species == "HUMAN"){
-      load(system.file("extdata", "HUMAN_Background_Network.RData", package = "NicheSIG"))
+      load(system.file("extdata", "HUMAN_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "NicheSIG"))
     } else {
       stop("Only the following species are supported: 'MOUSE', 'HUMAN'")
     }
@@ -286,6 +283,6 @@ compatability_score <- function(x,y,int) #where x is compatability score as list
   x=unlist(x)
   x=cbind(as.data.frame(int),as.data.frame(unlist(x)))
   colnames(x)=c("Gene", "Activation_probability")
-  x=join(x,y,by=c("Gene"),type="inner",match="first")
+  x=join(x,y,by=c("Gene"),type="inner")
   x=x[order(x$Activation_probability,decreasing = TRUE),]
 }
