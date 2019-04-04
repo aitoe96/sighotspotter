@@ -87,10 +87,14 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
   }
 
   #comp_score for each TF individually
-  score=lapply(nTF,comp_score_tf, int, gintg)
-  #converting the nested list into a matrix whose row sum will give probability of each intermediate
-  score_m=(matrix(unlist(score), ncol=length(score), byrow=F))
-  score_m_means=as.list(rowMeans(score_m))
-  final_score=compatability_score(score_m_means,Steady_state_true,int)
+  #extract all paths from all sources and targets
+  net_paths=lapply(int,all_path, nTF, gintg)
+  #calculate each path weight
+  net_weight=lapply(int,all_weight, nTF, gintg)
+  #calculate compatibility score for each TF
+  score_fast=lapply(c(nTF), score_pattern,net_paths,net_weight)
+  score=(matrix(unlist(score_fast), ncol=length(score_fast), byrow=F))
+  score_means=as.list(rowMeans(score))
+  final_score=compatability_score(score_means,Steady_state_true,int)
   return(final_score)
 }
