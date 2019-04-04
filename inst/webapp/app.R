@@ -183,6 +183,7 @@ ui <- shinyUI(
   {
     res_trimmed <- tail(res_trimmed, 10L)
     colnames(res_trimmed) <- c('Inactive signaling hotspots', 'Compatibility score')
+    res_trimmed <- res_trimmed[order(res_trimmed$'Compatibility score'),]
   }
   res_trimmed[,2] = round(res_trimmed[,2],4)
   rownames(res_trimmed) <- NULL
