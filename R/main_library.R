@@ -287,37 +287,3 @@ compatability_score <- function(x,y,int) #where x is compatability score as list
   x=join(x,y,by=c("Gene"),type="inner")
   x=x[order(x$Activation_probability,decreasing = TRUE),]
 }
-
-all_path <- function(s,t,g){
-  if (length(s) == 0) stop ('No intermediates found. You may decrease the percentile in order to find intermediates.') # decrease percentile cutoff
-  if (length(t) == 0) stop ('No non-terminal differentially expressed TFs found. You may decrease the cutoff.') # decrease normal cutoff
-  paths=(get.all.shortest.paths(g, s, t, mode = c("out"), weights=NA)$res)
-  if (length(paths) == 0) {c=0.5} else #stop ('No shortest path found. You may decrease the cutoff in order to find shortest path.') # decrease normal cutoff
-    # if (length(paths) == 0){
-    #   return (0)
-    # }
-    paths=unique(paths)
-  paths
-}
-
-
-all_weight <- function(s,t,g){
-  if (length(s) == 0) stop ('No intermediates found. You may decrease the percentile in order to find intermediates.') # decrease percentile cutoff
-  if (length(t) == 0) stop ('No non-terminal differentially expressed TFs found. You may decrease the cutoff.') # decrease normal cutoff
-  paths=(get.all.shortest.paths(g, s, t, mode = c("out"), weights=NA)$res)
-  if (length(paths) == 0) {c=0.5} else #stop ('No shortest path found. You may decrease the cutoff in order to find shortest path.') # decrease normal cutoff
-    # if (length(paths) == 0){
-    #   return (0)
-    # }
-    paths=unique(paths)
-  weight=lapply(paths,product_path_weight,g)
-  weight
-}
-
-score_pattern <- function(x,paths,weights){
-  tf=lapply(paths, grep, pattern=x, value=F)
-  tfweight=Map(`[`, weights, tf)
-  c=lapply(tfweight,weight_probability)
-  return(c)
-}
-
