@@ -1,7 +1,7 @@
 Package: NicheSIG
 Type: Package
 Title: NicheSIG: A novel approach to infer the effect of the cellular environment (niche) on the cell signaling cascade
-Version: 0.4
+Version: 0.4.1
 Authors@R: c( person("Srikanth", "Ravichandran", role = c("aut", "cre"),
                      email = "srikanth.ravichandran@uni.lu"),
               person("Andras", "Hartmann", role = c("aut"),
@@ -28,5 +28,6 @@ Imports:
 	shinythemes,
 	shinyBS,
 	rintrojs,
+	openxlsx,
 	markdown
 RoxygenNote: 6.1.0

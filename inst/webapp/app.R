@@ -20,9 +20,9 @@ analysis_page <- fluidPage(
   introjsUI(), #Needed for take a tour
   h3(textOutput("header", inline=TRUE),
      div(
-     actionButton("tour","Take a tour"),
-  actionButton("restart", "Restart"),
-     class='rightAlign')
+       actionButton("tour","Take a tour"),
+       actionButton("restart", "Restart"),
+       class='rightAlign')
      ),
 
   div( id ="Sidebar",
@@ -88,11 +88,23 @@ analysis_page <- fluidPage(
           )
         ),
         br(),
-         introBox(
-        actionButton("button", "Run"),
-         data.step = 7,
-         data.intro = "Click on Run to start the analysis"
-         )
+
+        fluidRow(
+          column(6,
+                 introBox(
+                   actionButton("button", "Run"),
+                   data.step = 7,
+                   data.intro = "Click on Run to start the analysis"
+                 )
+          ),
+          column(6,
+                 introBox(
+                   downloadButton("downloadResults", "Download"),
+                   data.step = 8,
+                   data.intro = "Click to download all the generated results"
+                 )
+          )
+        )
        )
   ),
   # Main panel for displaying data
@@ -162,11 +174,17 @@ ui <- shinyUI(
 #################################
 ## Function to update button state based on the status of uploaded files
 #################################
-.updateButton <- function(rv) {
+.updateButtons <- function(rv) {
   if(rv$species == "" || is.null(rv$cond1_file) || is.null(rv$cond2_file) || is.null(rv$de_file)){
     shinyjs::disable("button")
   } else {
     shinyjs::enable("button")
+  }
+
+  if(length(g_results) == 0) {
+    shinyjs::disable("downloadResults")
+  } else {
+    shinyjs::enable("downloadResults")
   }
 }
 
@@ -199,9 +217,7 @@ server <- function(input, output, session) {
   options(shiny.maxRequestSize=500*1024^2)
 
   # Global variables
-  # seesaw_res <<- NULL
-  # TODO: do we need any?
-
+  g_results <<- list()
 
   # Create reactive values
   rv <- reactiveValues( species = "", cond1_file = NULL,  cond2_file = NULL, de_file = NULL )
@@ -227,7 +243,7 @@ server <- function(input, output, session) {
       myfiles = strsplit(input$example, ";")[[1]]
       rv$dataFile = system.file("extdata/examples", myfiles[1], package="seesawData")
       updateSelectInput(session, "hairball", selected = myfiles[2])
-      .updateButton(rv)
+      .updateButtons(rv)
     }
   } )
 
@@ -236,26 +252,26 @@ server <- function(input, output, session) {
   #Species select input
   observeEvent(input$species, {
     rv$species = input$species
-    .updateButton(rv)
+    .updateButtons(rv)
   })
 
   # import data
   observeEvent(input$cond1_file, {
     rv$cond1_file=input$cond1_file
     #updateSelectizeInput(session, "example", selected = "")
-    .updateButton(rv)
+    .updateButtons(rv)
   })
 
   observeEvent(input$cond2_file, {
     rv$cond2_file=input$cond2_file
     #updateSelectizeInput(session, "example", selected = "")
-    .updateButton(rv)
+    .updateButtons(rv)
   })
 
   observeEvent(input$de_file, {
     rv$de_file=input$de_file
     #updateSelectizeInput(session, "example", selected = "")
-    .updateButton(rv)
+    .updateButtons(rv)
   })
 
 
@@ -275,10 +291,54 @@ server <- function(input, output, session) {
     session$reload()
   })
 
-  #Take a tour
+  # Take a tour
   observeEvent(input$tour,{
     introjs(session )
   })
+
+  # Download results
+
+  output$downloadResults <- downloadHandler(
+    filename = function() {
+      paste("Results-", Sys.Date(), ".xlsx", sep="")
+    },
+    content = function(file){
+      library('openxlsx')
+
+      ## Create a blank workbook
+      wb <- createWorkbook()
+
+      # General information
+      l_info = list()
+      l_info$Software <-  paste0('NicheSIG v',  packageVersion("NicheSIG") )
+      l_info$Condition1 <- rv$cond1_file$name
+      l_info$Condition2 <- rv$cond2_file$name
+      l_info$Cutoff <- input$cutoff
+      l_info$Percentile <- input$pctile
+
+      # Add infosheet to wb
+      addWorksheet(wb, 'General')
+      writeData(wb, 'General', as.data.frame(unlist(l_info)), rowNames = TRUE, colNames = FALSE)
+
+     # Condition 1
+      addWorksheet(wb, 'Condition1')
+      condition <- g_results[[1]]
+      condition$Steady_state <- NULL
+      colnames(condition) <- c('Gene', 'Compatibility score')
+      writeData(wb, 'Condition1', condition, rowNames = FALSE, colNames = TRUE)
+
+     # Condition 2
+      addWorksheet(wb, 'Condition2')
+      condition <- g_results[[2]]
+      condition$Steady_state <- NULL
+      colnames(condition) <- c('Gene', 'Compatibility score')
+      writeData(wb, 'Condition2', condition, rowNames = FALSE, colNames = TRUE)
+
+      ## Save workbook to working directory
+      saveWorkbook(wb, file = file, overwrite = TRUE)
+    }
+  )
+
 
   #################################
   # Output generation
@@ -294,13 +354,13 @@ server <- function(input, output, session) {
         withProgress(message = 'Please wait.',  {
           withProgress(message = 'Condition 1',  {
 
-            res1 = NicheSIG_pipeline (input$species, rv$cond1_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = FALSE)
+            g_results[[1]] <<- NicheSIG_pipeline (input$species, rv$cond1_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = FALSE)
             output$results1_active <- DT::renderDataTable({
-              .trimResults(res1, active = TRUE)
+              .trimResults(g_results[[1]], active = TRUE)
             },server = TRUE, selection = "single")
 
             output$results1_inactive <- DT::renderDataTable({
-              .trimResults(res1, active = FALSE)
+              .trimResults(g_results[[1]], active = FALSE)
             },server = TRUE, selection = "single")
           })
 
@@ -309,19 +369,20 @@ server <- function(input, output, session) {
           incProgress(0.4)
 
           withProgress(message = 'Condition 2',  {
-            res2= NicheSIG_pipeline (input$species, rv$cond2_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = TRUE)
+            g_results[[2]] <<- NicheSIG_pipeline (input$species, rv$cond2_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = TRUE)
             output$results2_active <- DT::renderDataTable({
-              .trimResults(res2, active = TRUE)
+              .trimResults( g_results[[2]], active = TRUE)
             },server = TRUE, selection = "single")
 
             output$results2_inactive <- DT::renderDataTable({
-              .trimResults(res2, active = FALSE)
+              .trimResults( g_results[[2]], active = FALSE)
             },server = TRUE, selection = "single")
           })
 
           output$titleText2 <- renderText(paste("Condition2:",rv$cond2_file$name))
         })
 
+        .updateButtons(rv)
       }
       , error = function(e){
         showModal(modalDialog(
