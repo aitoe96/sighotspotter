@@ -196,10 +196,12 @@ ui <- shinyUI(
   res_trimmed = results[,1:2]
   if (active){
     res_trimmed <- head(res_trimmed, 10L)
+    res_trimmed <- res_trimmed[res_trimmed[,2]>=0.5,]
     colnames(res_trimmed) <- c('Active signaling hotspots', 'Compatibility score')
   } else
   {
     res_trimmed <- tail(res_trimmed, 10L)
+    res_trimmed <- res_trimmed[res_trimmed[,2]<0.5,]
     colnames(res_trimmed) <- c('Inactive signaling hotspots', 'Compatibility score')
     res_trimmed <- res_trimmed[order(res_trimmed$'Compatibility score'),]
   }
