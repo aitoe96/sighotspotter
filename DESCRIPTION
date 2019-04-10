@@ -1,4 +1,4 @@
-Package: NicheSIG
+Package: SigHotSpotter 
 Type: Package
 Title: NicheSIG: A novel approach to infer the effect of the cellular environment (niche) on the cell signaling cascade
 Version: 0.3.6
