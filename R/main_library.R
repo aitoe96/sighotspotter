@@ -1,10 +1,10 @@
 Data_preprocessing <- function(input_data,cutoff,species)
 {
   if(species == "MOUSE"){
-    load(system.file("extdata", "MOUSE_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "NicheSIG"))
+    load(system.file("extdata", "MOUSE_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "SigHotSpotter"))
   } else {
     if(species == "HUMAN"){
-      load(system.file("extdata", "HUMAN_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "NicheSIG"))
+      load(system.file("extdata", "HUMAN_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "SigHotSpotter"))
     } else {
       stop("Only the following species are supported: 'MOUSE', 'HUMAN'")
     }

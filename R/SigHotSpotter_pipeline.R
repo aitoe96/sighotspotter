@@ -1,4 +1,4 @@
-#' General pipeline for NicheSIG
+#' General pipeline for SigHotSpotter
 #'
 #' The function computes compatibility scores for signaling intermediates
 #'
@@ -11,10 +11,10 @@
 #' @param showprogress shows progress bar if TRUE, set it to FALSE in batch mode, default = TRUE
 #' @return Compatibility scores
 #' @export
-NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percentile, invert_DE = FALSE, showprogress = TRUE)
+SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percentile, invert_DE = FALSE, showprogress = TRUE)
 {
   ## Import necessary libraries
-  library(NicheSIG)
+  library(SigHotSpotter)
   library(plyr)
   library(igraph)
   library(Matrix)
@@ -26,10 +26,10 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
 
   ## Choose correct dataset according to species
   if(species == "MOUSE"){
-    load(system.file("extdata", "MOUSE_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "NicheSIG"))
+    load(system.file("extdata", "MOUSE_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "SigHotSpotter"))
   } else {
     if(species == "HUMAN"){
-      load(system.file("extdata", "HUMAN_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "NicheSIG"))
+      load(system.file("extdata", "HUMAN_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "SigHotSpotter"))
     } else {
       stop("Only the following species are supported: 'MOUSE', 'HUMAN'")
     }

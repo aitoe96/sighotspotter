@@ -1,4 +1,4 @@
-#' NicheSIG: A novel approach to infer the effect of the cellular environment (niche) on the cell signaling cascade
+#' SigHotSpotter: A novel approach to infer the effect of the cellular environment (niche) on the cell signaling cascade
 #'
 #' This package introduces a Markov Chain Model for Cell Signaling Cascade Inference.
 #'
