@@ -13,6 +13,7 @@ Description:  This package introduces a Markov Chain Model for Cell Signaling Ca
 License: AGPL-3
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 3.3)
 Imports: 
 	plyr,
 	igraph,

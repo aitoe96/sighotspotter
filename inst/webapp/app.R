@@ -326,14 +326,18 @@ server <- function(input, output, session) {
       addWorksheet(wb, 'Condition1')
       condition <- g_results[[1]]
       condition$Steady_state <- NULL
-      colnames(condition) <- c('Gene', 'Compatibility score')
+      colnames(condition) <- c('Signaling hotspots*', 'Compatibility score')
+      condition = rbind(condition, c('', ''))
+      condition = rbind(condition, c('', '*: Values larger than 0.5 denote active, smaller than 0.5 denote inactive signaling hotspots'))
       writeData(wb, 'Condition1', condition, rowNames = FALSE, colNames = TRUE)
 
      # Condition 2
       addWorksheet(wb, 'Condition2')
       condition <- g_results[[2]]
       condition$Steady_state <- NULL
-      colnames(condition) <- c('Gene', 'Compatibility score')
+      colnames(condition) <- c('Signaling hotspots*', 'Compatibility score')
+      condition = rbind(condition, c('', ''))
+      condition = rbind(condition, c('', '*: Values larger than 0.5 denote active, smaller than 0.5 denote inactive signaling hotspots'))
       writeData(wb, 'Condition2', condition, rowNames = FALSE, colNames = TRUE)
 
       ## Save workbook to working directory
