@@ -196,7 +196,7 @@ ui <- shinyUI(
   res_trimmed = results[,1:2]
   if (active){
     res_trimmed <- head(res_trimmed, 10L)
-    res_trimmed <- res_trimmed[res_trimmed[,2]>=0.5,]
+    res_trimmed <- res_trimmed[res_trimmed[,2]>0.5,]
     colnames(res_trimmed) <- c('Active signaling hotspots', 'Compatibility score')
   } else
   {
@@ -326,7 +326,7 @@ server <- function(input, output, session) {
       addWorksheet(wb, 'Condition1')
       condition <- g_results[[1]]
       condition$Steady_state <- NULL
-      colnames(condition) <- c('Signaling hotspots*', 'Compatibility score')
+      colnames(condition) <- c('Signaling hotspots', 'Compatibility score*')
       condition = rbind(condition, c('', ''))
       condition = rbind(condition, c('', '*: Values larger than 0.5 denote active, smaller than 0.5 denote inactive signaling hotspots'))
       writeData(wb, 'Condition1', condition, rowNames = FALSE, colNames = TRUE)
@@ -335,7 +335,7 @@ server <- function(input, output, session) {
       addWorksheet(wb, 'Condition2')
       condition <- g_results[[2]]
       condition$Steady_state <- NULL
-      colnames(condition) <- c('Signaling hotspots*', 'Compatibility score')
+      colnames(condition) <- c('Signaling hotspots', 'Compatibility score*')
       condition = rbind(condition, c('', ''))
       condition = rbind(condition, c('', '*: Values larger than 0.5 denote active, smaller than 0.5 denote inactive signaling hotspots'))
       writeData(wb, 'Condition2', condition, rowNames = FALSE, colNames = TRUE)
