@@ -5,7 +5,7 @@ library(rintrojs)
 library(shinythemes)
 library(DT)
 library(markdown)
-library(NicheSIG)
+library(SigHotSpotter)
 
 #################################
 ## UI definition
@@ -145,7 +145,7 @@ help_page <- fluidPage(h1("Help"),title='help_page',navlistPanel(
 source_page <- fluidPage(h1("Source"),title='source_page',  {includeMarkdown('www/Source.md')} )
 documentation_page <- fluidPage(h1("Documentation"),title='documentation_page')
 contact_page <- fluidPage(h1("Contact"),title='contact_page')
-corner_element <- HTML("<a style=\"color:currentColor;text-decoration:none;\" rel=\"Home\" href=\"http://nichesig.lcsb.uni.lu/\">NicheSIG</a>")
+corner_element <- HTML("<a style=\"color:currentColor;text-decoration:none;\" rel=\"Home\" href=\"http://nichesig.lcsb.uni.lu/\">SigHotSpotter</a>")
 ui <- shinyUI(
   fluidPage(
     shiny::tags$head( includeCSS('www/default.css'), includeHTML('www/favicon.html')),
@@ -160,7 +160,7 @@ ui <- shinyUI(
                #tabPanel("Documentation", documentation_page),
                #tabPanel("Contact", contact_page),
                collapsible = TRUE,
-               windowTitle = "NicheSIG"
+               windowTitle = "SigHotSpotter"
                #TODO: include icon
               # icon = {icon("calendar")}, #{'https://d30y9cdsu7xlg0.cloudfront.net/png/230171-200.png'},
     ),
@@ -229,7 +229,7 @@ server <- function(input, output, session) {
   output$header <- renderText("Input data")
   #output$description1 <- renderText('Please upload data files containing for the two conditions and the differential analysis')
 
-  output$footertext<- renderText(paste0('NicheSIG v',  packageVersion("NicheSIG") ) )
+  output$footertext<- renderText(paste0('SigHotSpotter v',  packageVersion("SigHotSpotter") ) )
 
   #################################
   # Observer definitions
@@ -312,7 +312,7 @@ server <- function(input, output, session) {
 
       # General information
       l_info = list()
-      l_info$Software <-  paste0('NicheSIG v',  packageVersion("NicheSIG") )
+      l_info$Software <-  paste0('SigHotSpotter v',  packageVersion("SigHotSpotter") )
       l_info$Condition1 <- rv$cond1_file$name
       l_info$Condition2 <- rv$cond2_file$name
       l_info$Cutoff <- input$cutoff
@@ -360,7 +360,7 @@ server <- function(input, output, session) {
         withProgress(message = 'Please wait.',  {
           withProgress(message = 'Condition 1',  {
 
-            g_results[[1]] <<- NicheSIG_pipeline (input$species, rv$cond1_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = FALSE)
+            g_results[[1]] <<- SigHotSpotter_pipeline (input$species, rv$cond1_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = FALSE)
             output$results1_active <- DT::renderDataTable({
               .trimResults(g_results[[1]], active = TRUE)
             },server = TRUE, selection = "single")
@@ -375,7 +375,7 @@ server <- function(input, output, session) {
           incProgress(0.4)
 
           withProgress(message = 'Condition 2',  {
-            g_results[[2]] <<- NicheSIG_pipeline (input$species, rv$cond2_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = TRUE)
+            g_results[[2]] <<- SigHotSpotter_pipeline (input$species, rv$cond2_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = TRUE)
             output$results2_active <- DT::renderDataTable({
               .trimResults( g_results[[2]], active = TRUE)
             },server = TRUE, selection = "single")
