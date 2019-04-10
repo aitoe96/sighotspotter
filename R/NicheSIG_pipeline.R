@@ -20,13 +20,16 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
   library(Matrix)
   library(reshape2)
   library(parallel)
+  library(RSpectra)
+  library(dplyr)
+  library(snow)
 
   ## Choose correct dataset according to species
   if(species == "MOUSE"){
-    load(system.file("extdata", "MOUSE_Background_Network.RData", package = "NicheSIG"))
+    load(system.file("extdata", "MOUSE_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "NicheSIG"))
   } else {
     if(species == "HUMAN"){
-      load(system.file("extdata", "HUMAN_Background_Network.RData", package = "NicheSIG"))
+      load(system.file("extdata", "HUMAN_Background_Network_omnipath_reactome_metacore_01042019.RData", package = "NicheSIG"))
     } else {
       stop("Only the following species are supported: 'MOUSE', 'HUMAN'")
     }
@@ -83,19 +86,11 @@ NicheSIG_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percen
     setProgress(detail = "Compatibility scores")
   }
 
-  #comp score in serial
-  comp_score=lapply(int,spcal_path_weight,nTF,gintg)
-  #Compatability_score=unlist(comp_score)
-  #comp_score1=cbind(as.data.frame(int),as.data.frame(unlist(comp_score)))
-  #colnames(comp_score1)=c("Gene", "Compatability_Score")
-  #comp_score1=join(comp_score1,Steady_state_true,by=c("Gene"),type="inner",match="first")
-  #comp_score1=comp_score1[order(comp_score1$Compatability_Score,decreasing = TRUE),]
-
-  comp_score1=compatability_score(comp_score,Steady_state_true,int)
-#  out_CS=paste("compatability_score_",args[1],sep="")
-#  out_SS=paste("Steady_state_",args[1],sep="")
-#  names(comp_score1)=c("Gene", out_CS, out_SS)
-  #out = paste("compatability_score_",input_data,"_",cutoff,"_",percentile,".txt",sep="")
-  #write.table(comp_score1,out,sep="\t",quote=FALSE,row.names=FALSE)
-  return(comp_score1)
+  #comp_score for each TF individually
+  score=lapply(nTF,comp_score_tf, int, gintg)
+  #converting the nested list into a matrix whose row sum will give probability of each intermediate
+  score_m=(matrix(unlist(score), ncol=length(score), byrow=F))
+  score_m_means=as.list(rowMeans(score_m))
+  final_score=compatability_score(score_m_means,Steady_state_true,int)
+  return(final_score)
 }
