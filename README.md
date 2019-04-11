@@ -16,14 +16,15 @@ This software was developed in the [Computational Biology Group](https://wwwfr.u
 
 ## System requirements 
 ### Hardware requirements
-The `SigHotSpotter` package requires only a standard PC, for optimal performance, at least 8 GB of RAM and 4 cores of 2.5 GHz each (or above) are recommended.
+There are no special hardware requirements, the tool was tested on a virtual machine with 4GB of memory, a 4 core Intel Xeon 2.5 GHz, and 50 GB allocated space on a hard disk. 
 
 ### Software dependencies
-The package supports linux and macOS operating systems, and requires `R` version 3.2.3 or later. Tested platforms:
-- linux: Ubuntu 16.04 TLS / R 3.2.3
-- macOS: Sierra 10.12.6 / R 3.5.1
+The package supports all main operating systems, and requires `R` version 3.3 or later. Tested configurations:
+- Windows: (?) / (?)
+- linux: Ubuntu 16.04 TLS / R 3.4.4
+- macOS: Sierra 10.12.6 / R 3.5.3
 
-Running the interface locally requires `RStudio`, we suggest to use the latest build (RStudio Desktop 1.1.463)
+The web interface depends on shiny webserver (deployed on version 1.5.9.923), all further software dependencies are contained in the package description. In order to use the software as a standalone application rstudio is recommended (tested on Version 1.0.143) .
 
 ## Installation guide (linux/unix)
 From an `RStudio` terminal, type: 
@@ -92,6 +93,7 @@ Parameters:
 - percentile = 90
 
 The expected runtime is 6 minutes, see the expected output in the corresponding sheet of the Supplementary Table 1. to Computational approach to control cell phenotype for cellular rejuvenation strategies
+
 
 ---
 The [SigHotSpotter](https://nichesig.lcsb.uni.lu/webapp/) web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
