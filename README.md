@@ -36,9 +36,9 @@ install_git("https://gitlab.com/srikanth.ravichandran/sighotspotter")
 This will install all the package dependencies as well as the SigHotSpotter package, it takes about 3 minutes.
 If the install would fail because the dependencies can not be installed, you can install the dependencies before installing the package by typing:
 ```R
-install.packages(c("plyr","igraph","Matrix","shiny","DT","shinyjs","shinythemes","shinyBS","rintrojs","markdown"))
+install.packages( c("plyr", "igraph", "Matrix", "reshape2", "RSpectra", "dplyr", "snow", "shiny", "DT", "shinyjs", "shinythemes", "shinyBS", "rintrojs", "openxlsx", "markdown") )
 ```
-Takes about 3 minutes to install.
+Takes about 3-5 minutes to install.
 
 
 ## Instruction to use
@@ -78,7 +78,7 @@ Download and unzip the test dataset (e.g. in your tmp folder) from <a href="http
 ```bash
 cd /tmp
 wget https://webdav-r3lab.uni.lu/public/cbg/SigHotSpotter/data/SigHotSpotter_datasets.zip
-unzip SigHotSpotter.zip
+unzip SigHotSpotter_datasets.zip
 ```
 Access the application as specified in the previous section, and upload the test data.
 For example, to test the mESC predictions, choose the following files:
