@@ -1,11 +1,11 @@
-# NicheSIG
+# SigHotSpotter
 
 ## About
 
 A key goal of regenerative medicine is to restore structure and function of damaged tissues and organs due to disease and ageing. Despite recent advances, the identification of key factors for efficient control of cell phenotype to enable cellular rejuvenation is still a challenge. 
 Several computational methods have been useful in designing cellular conversion strategies, however, they mainly rely on gene regulatory network (GRN) models without accounting for the cellular microenvironment (niche), which is important for maintenance of in vivo cellular phenotype.
-Our main assumption here is that a cellular phenotype is maintained by the sustained effect of the niche via key signaling molecules. Accordingly, we propose a probabilistic method `NicheSIG` to identify such signaling molecules by integrating signaling and transcriptional networks.
-Application of NicheSIG on several niche dependent cellular systems correctly predicted known niche induced signaling molecules. Importantly, NicheSIG outperforms commonly employed signaling pathway enrichment/inference methods.
+Our main assumption here is that a cellular phenotype is maintained by the sustained effect of the niche via key signaling molecules. Accordingly, we propose a probabilistic method `SigHotSpotter` to identify such signaling molecules by integrating signaling and transcriptional networks.
+Application of SigHotSpotter on several niche dependent cellular systems correctly predicted known niche induced signaling molecules. Importantly, SigHotSpotter outperforms commonly employed signaling pathway enrichment/inference methods.
 
 ### Authors
 
@@ -16,29 +16,30 @@ This software was developed in the [Computational Biology Group](https://wwwfr.u
 
 ## System requirements 
 ### Hardware requirements
-The `NicheSIG` package requires only a standard PC, for optimal performance, at least 8 GB of RAM and 4 cores of 2.5 GHz each (or above) are recommended.
+There are no special hardware requirements, the tool was tested on a virtual machine with 4GB of memory, a 4 core Intel Xeon 2.5 GHz, and 50 GB allocated space on a hard disk. 
 
 ### Software dependencies
-The package supports linux and macOS operating systems, and requires `R` version 3.2.3 or later. Tested platforms:
-- linux: Ubuntu 16.04 TLS / R 3.2.3
-- macOS: Sierra 10.12.6 / R 3.5.1
+The package supports all main operating systems, and requires `R` version 3.3 or later. Tested configurations:
+- Windows: Windows 7 / R 3.5.1
+- linux: Ubuntu 16.04 TLS / R 3.4.4
+- macOS: Sierra 10.12.6 / R 3.5.3
 
-Running the interface locally requires `RStudio`, we suggest to use the latest build (RStudio Desktop 1.1.463)
+The web interface depends on shiny webserver (deployed on version 1.5.9.923), all further software dependencies are contained in the package description. In order to use the software as a standalone application rstudio is recommended (tested on Version 1.0.143) .
 
 ## Installation guide (linux/unix)
 From an `RStudio` terminal, type: 
 
 ```R
 require("devtools")
-install_git("https://gitlab.uni.lu/sravichandran/nichesig.git")
+install_git("https://gitlab.com/srikanth.ravichandran/sighotspotter")
 ```
 
-This will install all the package dependencies as well as the NicheSIG package, it takes about 3 minutes.
+This will install all the package dependencies as well as the SigHotSpotter package, it takes about 3 minutes.
 If the install would fail because the dependencies can not be installed, you can install the dependencies before installing the package by typing:
 ```R
-install.packages(c("plyr","igraph","Matrix","shiny","DT","shinyjs","shinythemes","shinyBS","rintrojs","markdown"))
+install.packages( c("plyr", "igraph", "Matrix", "reshape2", "RSpectra", "dplyr", "snow", "shiny", "DT", "shinyjs", "shinythemes", "shinyBS", "rintrojs", "openxlsx", "markdown") )
 ```
-Takes about 3 minutes to install.
+Takes about 3-5 minutes to install.
 
 
 ## Instruction to use
@@ -48,14 +49,14 @@ Takes about 3 minutes to install.
 From an `RStudio` terminal, type: 
 
 ```R
-shiny::runApp(paste(find.package("NicheSIG"), "webapp", "app.R", sep = .Platform$file.sep))
+shiny::runApp(paste(find.package("SigHotSpotter"), "webapp", "app.R", sep = .Platform$file.sep))
 ```
 
 This will open the graphical user interface locally
 
 ### Web interface
 An online web interface of the application is accessible at
-[https://nichesig.lcsb.uni.lu](https://nichesig.lcsb.uni.lu), and is provided free of charge for academic, non-profit use.
+[https://sighotspotter.lcsb.uni.lu](https://sighotspotter.lcsb.uni.lu), and is provided free of charge for academic, non-profit use.
 
 
 ### Application walkthrough
@@ -64,21 +65,21 @@ Click on the "Take a tour" button for walkthrough.
 
 ### Input file formats
 
-The required input of NicheSIG are tab separated value files. 
+The required input of SigHotSpotter are tab separated value files. 
 - The files for condition 1 and condition 2 shall contain gene expression data (normalized bulk or single-cell measurements).
 Rows represent genes labeled with gene symbols, and columns represent replicates or data for single cells.
 - The differential expression file shall contain only the significantly differentially expressed genes where 1 denotes up-regulated genes in condition 1 and -1 denotes up-regulated genes in condition 2
 See an example dataset
-<a href="https://webdav-r3lab.uni.lu/public/cbg/NicheSIG/data/NicheSIG_datasets.zip" target="_blank">here</a>.
+<a href="https://webdav-r3lab.uni.lu/public/cbg/SigHotSpotter/data/SigHotSpotter_datasets.zip" target="_blank">here</a>.
 
 ## Demo
 
-Download and unzip the test dataset (e.g. in your tmp folder) from <a href="https://webdav-r3lab.uni.lu/public/cbg/NicheSIG/data/NicheSIG_datasets.zip" target="_blank">here</a>, or use the following `shell` commands to download the dataset:
+Download and unzip the test dataset (e.g. in your tmp folder) from <a href="https://webdav-r3lab.uni.lu/public/cbg/SigHotSpotter/data/SigHotSpotter_datasets.zip" target="_blank">here</a>, or use the following `shell` commands to download the dataset:
 
 ```bash
 cd /tmp
-wget https://webdav-r3lab.uni.lu/public/cbg/NicheSIG/source/NicheSIG.zip
-unzip NicheSIG.zip
+wget https://webdav-r3lab.uni.lu/public/cbg/SigHotSpotter/data/SigHotSpotter_datasets.zip
+unzip SigHotSpotter_datasets.zip
 ```
 Access the application as specified in the previous section, and upload the test data.
 For example, to test the mESC predictions, choose the following files:
@@ -93,8 +94,14 @@ Parameters:
 
 The expected runtime is 6 minutes, see the expected output in the corresponding sheet of the Supplementary Table 1. to Computational approach to control cell phenotype for cellular rejuvenation strategies
 
----
-The [NicheSIG](https://nichesig.lcsb.uni.lu/webapp/) web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
+## Time estimates for running
+
+Calculation of hotspots depends heavily on the settings and the input data type, and ranges from 30 seconds to 10 minutes. In case of cutoff set to 30% on single-cell data, the calculation takes less than two minutes on the configuration described above.
+
+
+## Web interface
+
+The [SigHotSpotter](https://sighotspotter.lcsb.uni.lu/webapp/) is a web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
 For commercial use, please contact the authors for a license.
 Using the SOFTWARE means you accept the terms and conditions of the Disclaimer below.
 
