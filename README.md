@@ -20,7 +20,7 @@ There are no special hardware requirements, the tool was tested on a virtual mac
 
 ### Software dependencies
 The package supports all main operating systems, and requires `R` version 3.3 or later. Tested configurations:
-- Windows: (?) / (?)
+- Windows: Windows 7 / R 3.5.1
 - linux: Ubuntu 16.04 TLS / R 3.4.4
 - macOS: Sierra 10.12.6 / R 3.5.3
 
