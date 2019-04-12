@@ -145,7 +145,7 @@ help_page <- fluidPage(h1("Help"),title='help_page',navlistPanel(
 source_page <- fluidPage(h1("Source"),title='source_page',  {includeMarkdown('www/Source.md')} )
 documentation_page <- fluidPage(h1("Documentation"),title='documentation_page')
 contact_page <- fluidPage(h1("Contact"),title='contact_page')
-corner_element <- HTML("<a style=\"color:currentColor;text-decoration:none;\" rel=\"Home\" href=\"http://nichesig.lcsb.uni.lu/\">SigHotSpotter</a>")
+corner_element <- HTML("<a style=\"color:currentColor;text-decoration:none;\" rel=\"Home\" href=\"http://sighotspotter.lcsb.uni.lu/\">SigHotSpotter</a>")
 ui <- shinyUI(
   fluidPage(
     shiny::tags$head( includeCSS('www/default.css'), includeHTML('www/favicon.html')),
