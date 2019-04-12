@@ -55,9 +55,9 @@ shiny::runApp(paste(find.package("SigHotSpotter"), "webapp", "app.R", sep = .Pla
 This will open the graphical user interface locally
 
 ### Web interface
-An online web interface of the application is accessible at
+An online web interface of the SigHotSpotter application (SOFTWARE for short) is accessible at
 [https://sighotspotter.lcsb.uni.lu](https://sighotspotter.lcsb.uni.lu), and is provided free of charge for academic, non-profit use.
-
+Using the SOFTWARE means you accept the terms and conditions of the Disclaimer below.
 
 ### Application walkthrough
 
@@ -83,29 +83,21 @@ unzip SigHotSpotter_datasets.zip
 ```
 Access the application as specified in the previous section, and upload the test data.
 For example, to test the mESC predictions, choose the following files:
-- condition 1 = ESC_data.txt
-- condition 2 = Epi_LC_D2_data.txt
-- differential expression = DEG_ESC_Epi_LC_D2.txt
+- condition 1 = 2i.txt
+- condition 2 = lif.txt
+- differential expression = DE_BOOLEAN_2i_lif.txt
 
 Parameters:
 - species = Mouse
-- cutoff = 100
+- cutoff = 50
 - percentile = 90
-
-The expected runtime is 6 minutes, see the expected output in the corresponding sheet of the Supplementary Table 1. to Computational approach to control cell phenotype for cellular rejuvenation strategies
 
 ## Time estimates for running
 
 Calculation of hotspots depends heavily on the settings and the input data type, and ranges from 30 seconds to 10 minutes. In case of cutoff set to 30% on single-cell data, the calculation takes less than two minutes on the configuration described above.
 
 
-## Web interface
-
-The [SigHotSpotter](https://sighotspotter.lcsb.uni.lu/webapp/) is a web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
-For commercial use, please contact the authors for a license.
-Using the SOFTWARE means you accept the terms and conditions of the Disclaimer below.
-
-### Disclaimer
+## Disclaimer
 
 THE SOFTWARE IS NOT TO BE USED FOR TREATING OR DIAGNOSING HUMAN SUBJECTS.
 
