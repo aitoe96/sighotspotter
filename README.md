@@ -99,8 +99,9 @@ The expected runtime is 6 minutes, see the expected output in the corresponding 
 Calculation of hotspots depends heavily on the settings and the input data type, and ranges from 30 seconds to 10 minutes. In case of cutoff set to 30% on single-cell data, the calculation takes less than two minutes on the configuration described above.
 
 
----
-The [SigHotSpotter](https://sighotspotter.lcsb.uni.lu/webapp/) web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
+## Web interface
+
+The [SigHotSpotter](https://sighotspotter.lcsb.uni.lu/webapp/) is a web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
 For commercial use, please contact the authors for a license.
 Using the SOFTWARE means you accept the terms and conditions of the Disclaimer below.
 
