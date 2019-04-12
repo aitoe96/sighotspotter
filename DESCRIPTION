@@ -9,7 +9,7 @@ Authors@R: c( person("Srikanth", "Ravichandran", role = c("aut", "cre"),
               person("Antonio", "del Sol", role = "fnd"))
 Maintainer: Srikanth Ravichandran <srikanth.ravichandran@uni.lu>
 Author: Srikanth Ravichandran[aut, cre], Andras Hartmann[aut], Antonio del Sol [fnd]
-Description:  This package introduces a Markov Chain Model for Cell Signaling Cascade Inference.
+Description: This package introduces a Markov Chain Model for Cell Signaling Cascade Inference.
 License: AGPL-3
 Encoding: UTF-8
 LazyData: true
@@ -31,4 +31,4 @@ Imports:
 	rintrojs,
 	openxlsx,
 	markdown
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
