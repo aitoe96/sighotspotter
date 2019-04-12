@@ -56,7 +56,7 @@ This will open the graphical user interface locally
 
 ### Web interface
 An online web interface of the application is accessible at
-[https://nichesig.lcsb.uni.lu](https://nichesig.lcsb.uni.lu), and is provided free of charge for academic, non-profit use.
+[https://sighotspotter.lcsb.uni.lu](https://sighotspotter.lcsb.uni.lu), and is provided free of charge for academic, non-profit use.
 
 
 ### Application walkthrough
@@ -94,9 +94,13 @@ Parameters:
 
 The expected runtime is 6 minutes, see the expected output in the corresponding sheet of the Supplementary Table 1. to Computational approach to control cell phenotype for cellular rejuvenation strategies
 
+## Time estimates for running
+
+Calculation of hotspots depends heavily on the settings and the input data type, and ranges from 30 seconds to 10 minutes. In case of cutoff set to 30% on single-cell data, the calculation takes less than two minutes on the configuration described above.
+
 
 ---
-The [SigHotSpotter](https://nichesig.lcsb.uni.lu/webapp/) web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
+The [SigHotSpotter](https://sighotspotter.lcsb.uni.lu/webapp/) web-based tool (SOFTWARE for short) is provided free of charge for academic, non-profit use.
 For commercial use, please contact the authors for a license.
 Using the SOFTWARE means you accept the terms and conditions of the Disclaimer below.
 
