@@ -46,6 +46,8 @@ all_plots_I <- lapply(vis_net_I,vis.net.plot)
 #display the network plot
 all_plots_I[[1]] #displays the plot of rank 1 node in active signaling molecule
 
+#to save network in Sif file for cytoscape
+write.table(vis_net_A[[1]]$edges,paste(toiintA[1],".","sif",sep=""),row.names = F,quote=F)
 
 --------------#ROUGH IGNORE______________________________________________________
 
