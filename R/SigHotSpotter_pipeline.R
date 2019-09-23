@@ -36,7 +36,10 @@ SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, p
   }
   ## Checking if showprogress is needed
   #FIXME: is showprogress even necessary?
-  showprogress = showprogress && shiny::isRunning()
+  if(showprogress && !shiny::isRunning()){
+    showprogress = FALSE
+    warning('Can not show progress without the shiny environment.')
+  }
 
   ## Load the data
   if(showprogress){
