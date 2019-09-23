@@ -8,7 +8,7 @@
 #' @param DE_Genes_data Differential expression dataset (1 for up-regulated, -1 for down-regulated genes)
 #' @param percentile Predicted intermediates are taken into account above this threshold
 #' @param invert_DE If the differential expression should be inverted, default = FALSE
-#' @param showprogress shows progress bar if TRUE, set it to FALSE in batch mode, default = TRUE
+#' @param showprogress shows progress bar in shiny app if set to TRUE, set it to FALSE in batch mode without GUI, default = TRUE
 #' @return Compatibility scores
 #' @export
 SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percentile, invert_DE = FALSE, showprogress = TRUE)
@@ -34,6 +34,9 @@ SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, p
       stop("Only the following species are supported: 'MOUSE', 'HUMAN'")
     }
   }
+  ## Checking if showprogress is needed
+  #FIXME: is showprogress even necessary?
+  showprogress = showprogress && shiny::isRunning()
 
   ## Load the data
   if(showprogress){
