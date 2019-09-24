@@ -110,22 +110,27 @@ analysis_page <- fluidPage(
   # Main panel for displaying data
   mainPanel(
 
- #TODO: obsoleted, delete if not needed
- #   div( id="Input",
- #        DT::dataTableOutput("contents", width = 900)
- #   ),
+    fluidRow(
+      column(5, h3(textOutput('titleText1', inline=TRUE)))
+    ),
+    fluidRow(
+      column(7, class="leftAlign", DT::dataTableOutput("results1_active")),
+      column(5, visNetworkOutput("network"), offset = 0)
+    ),
+    fluidRow(
+      column(7, class="centerAlign", DT::dataTableOutput("results1_inactive"))
+    ),
+    fluidRow(
+      column(5, h3(textOutput('titleText2', inline=TRUE)))
+    ),
+    fluidRow(
+      column(7, class="centerAlign", DT::dataTableOutput("results2_active"))
+    ),
+    fluidRow(
+      column(7, class="centerAlign", DT::dataTableOutput("results2_inactive"))
+    ),
 
-    # Panel for displaying results
-    # verbatimTextOutput('result_summary'),
-    #fluidRow(
-      column(5, h3(textOutput('titleText1', inline=TRUE))),
-      column(9, class="centerAlign", DT::dataTableOutput("results1_active")),
-      column(9, class="centerAlign", DT::dataTableOutput("results1_inactive")),
-      column(5, h3(textOutput('titleText2', inline=TRUE))),
-      column(9, class="centerAlign", DT::dataTableOutput("results2_active")),
-      column(9, class="centerAlign", DT::dataTableOutput("results2_inactive"))
-    #)
-
+    width=10
   )
 
 )
@@ -389,6 +394,8 @@ server <- function(input, output, session) {
         })
 
         .updateButtons(rv)
+        shinyjs::hide(id = "Sidebar")
+        shinyjs::hide(id = "Input")
       }
       , error = function(e){
         showModal(modalDialog(
@@ -398,6 +405,28 @@ server <- function(input, output, session) {
       }
     )
 
+  })
+
+
+  # details when clicking on a result row
+  #output$network = renderPrint({
+    #s = input$results1_active_rows_selected
+    #if (length(s)) {
+      #cat('Hi, S: ',  s)
+    #}
+  #})
+  output$network <- renderVisNetwork({
+    # minimal example
+
+    s = input$results1_active_rows_selected
+    if (length(s)) {
+      nodes <- data.frame(id = 1:3)
+      edges <- data.frame(from = c(1,2), to = c(1,3))
+
+
+
+      visNetwork(nodes, edges)
+    }
   })
 
 }
