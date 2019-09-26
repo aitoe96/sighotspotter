@@ -40,7 +40,14 @@ edge_shortest <- function(path, graph)
   edges=E(graph, path=path)
 }
 
-# function to trim results
+# Function to trim results for display
+#
+# The function returns shortlist of best results
+#
+# @param results all results comuputed by SigHotSpotter_pipeline
+# @param active Active (TRUE) or inactive (FALSE)
+# @return Shortlisted results
+# @export
 .trimResults <- function(results, active = TRUE) {
 
   res_trimmed = results[,1:2]
@@ -97,10 +104,10 @@ shortest_path_network <- function (s,t,g, mst){
   return(net)
 }
 
-#' function for converting the input graph and the ints to a shortestpat network
-#' @param a,i active and inactive source nodes or int
-#' @param g input graph on which shortest path network must be inferred i.e. gintg
-#' @param t terminal nodes
+# function for converting the input graph and the ints to a shortestpat network
+# @param a,i active and inactive source nodes or int
+# @param g input graph on which shortest path network must be inferred i.e. gintg
+# @param t terminal nodes
 to_sp_net <- function(a,i,g,t){
   #changing the edge attributes of the integrated network
   #g=non_neg_weight(g)
@@ -119,11 +126,11 @@ to_sp_net <- function(a,i,g,t){
   return(sp_sub_net)
 }
 
-#' function for converting the input graph and the ints to a shortestpat network
-#' @param a,i active and inactive source nodes or int
-#' @param g input graph on which shortest path network must be inferred i.e. gintg
-#' @param t terminal nodes
-to_sp_net_int <- function(s,g,t,deg){
+# function for converting the input graph and the ints to a shortestpat network
+# @param a,i active and inactive source nodes or int
+# @param g input graph on which shortest path network must be inferred i.e. gintg
+# @param t terminal nodes
+to_sp_net_int <- function(s,g,t,deg,non_interface_TFs){
   #changing the edge attributes of the integrated network
   #g=non_neg_weight(g)
   #removing the edges from dummy to TFs as it affectes the shortest paths
@@ -143,17 +150,27 @@ to_sp_net_int <- function(s,g,t,deg){
   return(sp_sub_net)
 }
 
-#' function for changing the visnetwork edge color
-#' @param visg the visnetwork object
+# function for changing the visnetwork edge color
+# @param visg the visnetwork object
 vis.edge.color <- function(visg){
   visg$edges$color[visg$edges$Effect==1]="green"
   visg$edges$color[visg$edges$Effect==-1]="red"
   return(visg)
 }
 
-#' Function to plot the Visnetowkr object
-#' @param visg the visnetwork object
-vis.net.plot <- function(visg){
-  #hierarchy
-  visNetwork(visg$nodes,visg$edges) %>% visNodes(visg, shape="box") %>% visIgraphLayout(layout = "layout_as_tree",root="NICHE",flip.y = F) %>% visEdges(arrows = "to") %>%  visOptions(highlightNearest = list(enabled =TRUE, degree = 1, hover = T), nodesIdSelection = TRUE)  %>% visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="circle") %>% visGroups(visg, groupname="upregulated", color = "red",shape="triangle") %>% visGroups(visg, groupname="downregulated", color = "green", shape="triangle") %>% visPhysics(stabilization = FALSE) %>% visEdges(smooth = FALSE)
+# obsoleted, this function is used in app.R
+if(FALSE){
+  # Function to plot the Visnetwork object
+  # @param visg the visnetwork object
+  vis.net.plot <- function(visg){
+    #hierarchy
+    visNetwork(visg$nodes,visg$edges) %>% visNodes(visg, shape="box") %>%
+      visIgraphLayout(layout = "layout_as_tree",root="NICHE",flip.y = F) %>%
+      visEdges(arrows = "to") %>%  visOptions(highlightNearest = list(enabled =TRUE, degree = 1, hover = T), nodesIdSelection = TRUE)  %>%
+      visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="circle") %>%
+      visGroups(visg, groupname="upregulated", color = "red",shape="triangle") %>%
+      visGroups(visg, groupname="downregulated", color = "green", shape="triangle") %>%
+      visPhysics(stabilization = FALSE) %>% visEdges(smooth = FALSE) %>%
+      visExport()
+  }
 }

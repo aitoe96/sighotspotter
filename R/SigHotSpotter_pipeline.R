@@ -14,7 +14,7 @@
 SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percentile, invert_DE = FALSE, showprogress = TRUE)
 {
   ## Import necessary libraries
-  library(SigHotSpotter)
+  #library(SigHotSpotter)
   library(plyr)
   library(igraph)
   library(Matrix)
@@ -98,5 +98,40 @@ SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, p
   score_m=(matrix(unlist(score), ncol=length(score), byrow=F))
   score_m_means=as.list(rowMeans(score_m))
   final_score=compatability_score(score_m_means,Steady_state_true,int)
-  return(final_score)
+
+  ## Computing networks for visualization
+  if(showprogress){
+    incProgress()
+    setProgress(detail = "Computing networks")
+  }
+
+  trimmed_score_I=.trimResults(final_score,F)
+  trimmed_score_A=.trimResults(final_score,T)
+  toiintI=c(as.matrix(trimmed_score_I$`Inactive signaling hotspots`))
+  toiintA=c(as.matrix(trimmed_score_A$`Active signaling hotspots`))
+  twoi=c(toiintI,toiintA)
+
+  #pruning the integrated networks
+  gintg.p=prun.int.g(gintg)
+
+  #building networks for all intermediates for active signaling hotspots
+  sp_int_A <- lapply(toiintA,to_sp_net_int,gintg.p,nTF,DE_Genes,non_interface_TFs)
+
+  #building networks for inactive signaling hotspots
+  sp_int_I <- lapply(toiintI,to_sp_net_int,gintg.p,nTF,DE_Genes,non_interface_TFs)
+
+  #converting to visNetwork
+  vis_net_A <- lapply(sp_int_A,toVisNetworkData)
+  vis_net_I <- lapply(sp_int_I,toVisNetworkData)
+
+  #for edge color
+  vis_net_A <- lapply(vis_net_A,vis.edge.color)
+  vis_net_I <- lapply(vis_net_I,vis.edge.color)
+
+  ret_value = list(final_score=final_score,
+                   trimmed_score_A=trimmed_score_A,
+                   trimmed_score_I=trimmed_score_I,
+                   vis_net_A=vis_net_A,
+                   vis_net_I=vis_net_I )
+  return(ret_value)
 }
