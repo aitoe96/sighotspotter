@@ -158,19 +158,17 @@ vis.edge.color <- function(visg){
   return(visg)
 }
 
-# obsoleted, this function is used in app.R
-if(FALSE){
+# obsoleted, this function is used from app.R
   # Function to plot the Visnetwork object
   # @param visg the visnetwork object
-  vis.net.plot <- function(visg){
+#  vis.net.plot <- function(visg){
     #hierarchy
-    visNetwork(visg$nodes,visg$edges) %>% visNodes(visg, shape="box") %>%
-      visIgraphLayout(layout = "layout_as_tree",root="NICHE",flip.y = F) %>%
-      visEdges(arrows = "to") %>%  visOptions(highlightNearest = list(enabled =TRUE, degree = 1, hover = T), nodesIdSelection = TRUE)  %>%
-      visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="circle") %>%
-      visGroups(visg, groupname="upregulated", color = "red",shape="triangle") %>%
-      visGroups(visg, groupname="downregulated", color = "green", shape="triangle") %>%
-      visPhysics(stabilization = FALSE) %>% visEdges(smooth = FALSE) %>%
-      visExport()
-  }
-}
+  #visNetwork(visg$nodes,visg$edges) %>% visNodes(visg, shape="box") %>%
+    #visIgraphLayout(layout = "layout_as_tree",root="NICHE",flip.y = F) %>%
+    #visEdges(arrows = "to") %>%  visOptions(highlightNearest = list(enabled =TRUE, degree = 1, hover = T), nodesIdSelection = TRUE)  %>%
+    #visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="circle") %>%
+    #visGroups(visg, groupname="upregulated", color = "red",shape="triangle") %>%
+    #visGroups(visg, groupname="downregulated", color = "green", shape="triangle") %>%
+    #visPhysics(stabilization = FALSE) %>% visEdges(smooth = FALSE) %>%
+    #visExport()
+#}

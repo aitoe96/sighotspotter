@@ -115,28 +115,52 @@ analysis_page <- fluidPage(
       column(5, h3(textOutput('titleText1', inline=TRUE)))
     ),
     fluidRow(
-      column(7, class="leftAlign", DT::dataTableOutput("results1_active")),
+      column(7, class="centerAlign", DT::dataTableOutput("results1_active")),
+        #Thisis 1
       column(5, div( id ="div_A1",
         fluidRow(
-          visNetworkOutput("network")
+          visNetworkOutput("network_A1")
         ),
-        #Thisis 1
         fluidRow(
           div( id ="divButton_A1", downloadButton("download_A1", "Download network") )
         )
       ), offset = 0)
     ),
     fluidRow(
-      column(7, class="centerAlign", DT::dataTableOutput("results1_inactive"))
+      column(7, class="centerAlign", DT::dataTableOutput("results1_inactive")),
+      column(5, div( id ="div_I1",
+        fluidRow(
+          visNetworkOutput("network_I1")
+        ),
+        fluidRow(
+          div( id ="divButton_I1", downloadButton("download_I1", "Download network") )
+        )
+      ), offset = 0)
     ),
     fluidRow(
       column(5, h3(textOutput('titleText2', inline=TRUE)))
     ),
     fluidRow(
-      column(7, class="centerAlign", DT::dataTableOutput("results2_active"))
+      column(7, class="centerAlign", DT::dataTableOutput("results2_active")),
+      column(5, div( id ="div_A2",
+        fluidRow(
+          visNetworkOutput("network_A2")
+        ),
+        fluidRow(
+          div( id ="divButton_A2", downloadButton("download_A2", "Download network") )
+        )
+      ), offset = 0)
     ),
     fluidRow(
-      column(7, class="centerAlign", DT::dataTableOutput("results2_inactive"))
+      column(7, class="centerAlign", DT::dataTableOutput("results2_inactive")),
+      column(5, div( id ="div_I2",
+        fluidRow(
+          visNetworkOutput("network_I2")
+        ),
+        fluidRow(
+          div( id ="divButton_I2", downloadButton("download_I2", "Download network") )
+        )
+      ), offset = 0)
     ),
 
     width=10
@@ -355,6 +379,7 @@ server <- function(input, output, session) {
 
    #Thisis 3
   # Download networks
+  # active 1
   output$download_A1<- downloadHandler(
     filename = function() {
       fname = 'network.sif'
@@ -364,6 +389,45 @@ server <- function(input, output, session) {
       s = input$results1_active_rows_selected
       #to save network in Sif file for cytoscape
       write.table(g_results[[1]]$vis_net_A[[s]]$edges,file,append = F, row.names = F,quote=F)
+    }
+  )
+
+  # inactive 1
+  output$download_I1<- downloadHandler(
+    filename = function() {
+      fname = 'network.sif'
+      return (fname)
+    },
+    content = function(file){
+      s = input$results1_inactive_rows_selected
+      #to save network in Sif file for cytoscape
+      write.table(g_results[[1]]$vis_net_I[[s]]$edges,file,append = F, row.names = F,quote=F)
+    }
+  )
+
+  # active 2
+  output$download_A2<- downloadHandler(
+    filename = function() {
+      fname = 'network.sif'
+      return (fname)
+    },
+    content = function(file){
+      s = input$results2_active_rows_selected
+      #to save network in Sif file for cytoscape
+      write.table(g_results[[2]]$vis_net_A[[s]]$edges,file,append = F, row.names = F,quote=F)
+    }
+  )
+
+  # inactive 2
+  output$download_I2<- downloadHandler(
+    filename = function() {
+      fname = 'network.sif'
+      return (fname)
+    },
+    content = function(file){
+      s = input$results2_inactive_rows_selected
+      #to save network in Sif file for cytoscape
+      write.table(g_results[[2]]$vis_net_I[[s]]$edges,file,append = F, row.names = F,quote=F)
     }
   )
 
@@ -419,6 +483,14 @@ server <- function(input, output, session) {
         shinyjs::show(id = "div_A1")
         shinyjs::hide(id = "divButton_A1")
 
+        shinyjs::show(id = "div_I1")
+        shinyjs::hide(id = "divButton_I1")
+
+        shinyjs::show(id = "div_A2")
+        shinyjs::hide(id = "divButton_A2")
+
+        shinyjs::show(id = "div_I2")
+        shinyjs::hide(id = "divButton_I2")
       }
       , error = function(e){
         showModal(modalDialog(
@@ -430,17 +502,49 @@ server <- function(input, output, session) {
 
   })
 
-
+#Thisis 4
   # Plot network when clicking on a result row
-  output$network <- renderVisNetwork({
-    # minimal example
-
+  # active 1
+  output$network_A1 <- renderVisNetwork({
     s = input$results1_active_rows_selected
     if (length(s)) {
         shinyjs::show(id = "divButton_A1")
       vis.net.plot(g_results[[1]]$vis_net_A[[s]])
     } else {
         shinyjs::hide(id = "divButton_A1")
+    }
+  })
+
+  # inactive 1
+  output$network_I1 <- renderVisNetwork({
+    s = input$results1_inactive_rows_selected
+    if (length(s)) {
+        shinyjs::show(id = "divButton_I1")
+      vis.net.plot(g_results[[1]]$vis_net_I[[s]])
+    } else {
+        shinyjs::hide(id = "divButton_I1")
+    }
+  })
+
+  # active 2
+  output$network_A2 <- renderVisNetwork({
+    s = input$results2_active_rows_selected
+    if (length(s)) {
+        shinyjs::show(id = "divButton_A2")
+      vis.net.plot(g_results[[2]]$vis_net_A[[s]])
+    } else {
+        shinyjs::hide(id = "divButton_A2")
+    }
+  })
+
+  # inactive 2
+  output$network_I2 <- renderVisNetwork({
+    s = input$results2_inactive_rows_selected
+    if (length(s)) {
+        shinyjs::show(id = "divButton_I2")
+      vis.net.plot(g_results[[2]]$vis_net_I[[s]])
+    } else {
+        shinyjs::hide(id = "divButton_I2")
     }
   })
 
