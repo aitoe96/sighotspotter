@@ -6,6 +6,7 @@ library(shinythemes)
 library(DT)
 library(markdown)
 library(SigHotSpotter)
+library(visNetwork)
 
 #################################
 ## UI definition
@@ -110,22 +111,59 @@ analysis_page <- fluidPage(
   # Main panel for displaying data
   mainPanel(
 
- #TODO: obsoleted, delete if not needed
- #   div( id="Input",
- #        DT::dataTableOutput("contents", width = 900)
- #   ),
+    fluidRow(
+      column(5, h3(textOutput('titleText1', inline=TRUE)))
+    ),
+    fluidRow(
+      column(7, class="centerAlign", DT::dataTableOutput("results1_active")),
+        #Thisis 1
+      column(5, div( id ="div_A1",
+        fluidRow(
+          visNetworkOutput("network_A1")
+        ),
+        fluidRow(
+          div( id ="divButton_A1", downloadButton("download_A1", "Download network") )
+        )
+      ), offset = 0)
+    ),
+    fluidRow(
+      column(7, class="centerAlign", DT::dataTableOutput("results1_inactive")),
+      column(5, div( id ="div_I1",
+        fluidRow(
+          visNetworkOutput("network_I1")
+        ),
+        fluidRow(
+          div( id ="divButton_I1", downloadButton("download_I1", "Download network") )
+        )
+      ), offset = 0)
+    ),
+    fluidRow(
+      column(5, h3(textOutput('titleText2', inline=TRUE)))
+    ),
+    fluidRow(
+      column(7, class="centerAlign", DT::dataTableOutput("results2_active")),
+      column(5, div( id ="div_A2",
+        fluidRow(
+          visNetworkOutput("network_A2")
+        ),
+        fluidRow(
+          div( id ="divButton_A2", downloadButton("download_A2", "Download network") )
+        )
+      ), offset = 0)
+    ),
+    fluidRow(
+      column(7, class="centerAlign", DT::dataTableOutput("results2_inactive")),
+      column(5, div( id ="div_I2",
+        fluidRow(
+          visNetworkOutput("network_I2")
+        ),
+        fluidRow(
+          div( id ="divButton_I2", downloadButton("download_I2", "Download network") )
+        )
+      ), offset = 0)
+    ),
 
-    # Panel for displaying results
-    # verbatimTextOutput('result_summary'),
-    #fluidRow(
-      column(5, h3(textOutput('titleText1', inline=TRUE))),
-      column(9, class="centerAlign", DT::dataTableOutput("results1_active")),
-      column(9, class="centerAlign", DT::dataTableOutput("results1_inactive")),
-      column(5, h3(textOutput('titleText2', inline=TRUE))),
-      column(9, class="centerAlign", DT::dataTableOutput("results2_active")),
-      column(9, class="centerAlign", DT::dataTableOutput("results2_inactive"))
-    #)
-
+    width=10
   )
 
 )
@@ -171,6 +209,20 @@ ui <- shinyUI(
   )
 )
 
+# Function to plot the Visnetowkr object
+# @param visg the visnetwork object
+vis.net.plot <- function(visg){
+  #hierarchy
+  visNetwork(visg$nodes,visg$edges) %>% visNodes(visg, shape="box") %>%
+    visIgraphLayout(layout = "layout_as_tree",root="NICHE",flip.y = F) %>%
+    visEdges(arrows = "to") %>%  visOptions(highlightNearest = list(enabled =TRUE, degree = 1, hover = T), nodesIdSelection = TRUE)  %>%
+    visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="circle") %>%
+    visGroups(visg, groupname="upregulated", color = "red",shape="triangle") %>%
+    visGroups(visg, groupname="downregulated", color = "green", shape="triangle") %>%
+    visPhysics(stabilization = FALSE) %>% visEdges(smooth = FALSE) %>%
+    visExport(float = "left")
+}
+
 #################################
 ## Function to update button state based on the status of uploaded files
 #################################
@@ -186,28 +238,6 @@ ui <- shinyUI(
   } else {
     shinyjs::enable("downloadResults")
   }
-}
-
-#################################
-## Function to trim results for display
-#################################
-.trimResults <- function(results, active = TRUE) {
-
-  res_trimmed = results[,1:2]
-  if (active){
-    res_trimmed <- head(res_trimmed, 10L)
-    res_trimmed <- res_trimmed[res_trimmed[,2]>0.5,]
-    colnames(res_trimmed) <- c('Active signaling hotspots', 'Compatibility score')
-  } else
-  {
-    res_trimmed <- tail(res_trimmed, 10L)
-    res_trimmed <- res_trimmed[res_trimmed[,2]<0.5,]
-    colnames(res_trimmed) <- c('Inactive signaling hotspots', 'Compatibility score')
-    res_trimmed <- res_trimmed[order(res_trimmed$'Compatibility score'),]
-  }
-  res_trimmed[,2] = round(res_trimmed[,2],4)
-  rownames(res_trimmed) <- NULL
-  return(res_trimmed)
 }
 
 #################################
@@ -230,6 +260,8 @@ server <- function(input, output, session) {
   #output$description1 <- renderText('Please upload data files containing for the two conditions and the differential analysis')
 
   output$footertext<- renderText(paste0('SigHotSpotter v',  packageVersion("SigHotSpotter") ) )
+
+  shinyjs::hide(id = "div_A1")
 
   #################################
   # Observer definitions
@@ -345,6 +377,60 @@ server <- function(input, output, session) {
     }
   )
 
+   #Thisis 3
+  # Download networks
+  # active 1
+  output$download_A1<- downloadHandler(
+    filename = function() {
+      fname = 'network.sif'
+      return (fname)
+    },
+    content = function(file){
+      s = input$results1_active_rows_selected
+      #to save network in Sif file for cytoscape
+      write.table(g_results[[1]]$vis_net_A[[s]]$edges,file,append = F, row.names = F,quote=F)
+    }
+  )
+
+  # inactive 1
+  output$download_I1<- downloadHandler(
+    filename = function() {
+      fname = 'network.sif'
+      return (fname)
+    },
+    content = function(file){
+      s = input$results1_inactive_rows_selected
+      #to save network in Sif file for cytoscape
+      write.table(g_results[[1]]$vis_net_I[[s]]$edges,file,append = F, row.names = F,quote=F)
+    }
+  )
+
+  # active 2
+  output$download_A2<- downloadHandler(
+    filename = function() {
+      fname = 'network.sif'
+      return (fname)
+    },
+    content = function(file){
+      s = input$results2_active_rows_selected
+      #to save network in Sif file for cytoscape
+      write.table(g_results[[2]]$vis_net_A[[s]]$edges,file,append = F, row.names = F,quote=F)
+    }
+  )
+
+  # inactive 2
+  output$download_I2<- downloadHandler(
+    filename = function() {
+      fname = 'network.sif'
+      return (fname)
+    },
+    content = function(file){
+      s = input$results2_inactive_rows_selected
+      #to save network in Sif file for cytoscape
+      write.table(g_results[[2]]$vis_net_I[[s]]$edges,file,append = F, row.names = F,quote=F)
+    }
+  )
+
 
   #################################
   # Output generation
@@ -362,11 +448,11 @@ server <- function(input, output, session) {
 
             g_results[[1]] <<- SigHotSpotter_pipeline (input$species, rv$cond1_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = FALSE)
             output$results1_active <- DT::renderDataTable({
-              .trimResults(g_results[[1]], active = TRUE)
+              g_results[[1]]$trimmed_score_A
             },server = TRUE, selection = "single")
 
             output$results1_inactive <- DT::renderDataTable({
-              .trimResults(g_results[[1]], active = FALSE)
+              g_results[[1]]$trimmed_score_I
             },server = TRUE, selection = "single")
           })
 
@@ -377,11 +463,11 @@ server <- function(input, output, session) {
           withProgress(message = 'Condition 2',  {
             g_results[[2]] <<- SigHotSpotter_pipeline (input$species, rv$cond2_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = TRUE)
             output$results2_active <- DT::renderDataTable({
-              .trimResults( g_results[[2]], active = TRUE)
+              g_results[[1]]$trimmed_score_A
             },server = TRUE, selection = "single")
 
             output$results2_inactive <- DT::renderDataTable({
-              .trimResults( g_results[[2]], active = FALSE)
+              g_results[[1]]$trimmed_score_I
             },server = TRUE, selection = "single")
           })
 
@@ -389,6 +475,22 @@ server <- function(input, output, session) {
         })
 
         .updateButtons(rv)
+        shinyjs::hide(id = "Sidebar")
+        shinyjs::hide(id = "Input")
+
+
+        #Thisis 2
+        shinyjs::show(id = "div_A1")
+        shinyjs::hide(id = "divButton_A1")
+
+        shinyjs::show(id = "div_I1")
+        shinyjs::hide(id = "divButton_I1")
+
+        shinyjs::show(id = "div_A2")
+        shinyjs::hide(id = "divButton_A2")
+
+        shinyjs::show(id = "div_I2")
+        shinyjs::hide(id = "divButton_I2")
       }
       , error = function(e){
         showModal(modalDialog(
@@ -398,6 +500,52 @@ server <- function(input, output, session) {
       }
     )
 
+  })
+
+#Thisis 4
+  # Plot network when clicking on a result row
+  # active 1
+  output$network_A1 <- renderVisNetwork({
+    s = input$results1_active_rows_selected
+    if (length(s)) {
+        shinyjs::show(id = "divButton_A1")
+      vis.net.plot(g_results[[1]]$vis_net_A[[s]])
+    } else {
+        shinyjs::hide(id = "divButton_A1")
+    }
+  })
+
+  # inactive 1
+  output$network_I1 <- renderVisNetwork({
+    s = input$results1_inactive_rows_selected
+    if (length(s)) {
+        shinyjs::show(id = "divButton_I1")
+      vis.net.plot(g_results[[1]]$vis_net_I[[s]])
+    } else {
+        shinyjs::hide(id = "divButton_I1")
+    }
+  })
+
+  # active 2
+  output$network_A2 <- renderVisNetwork({
+    s = input$results2_active_rows_selected
+    if (length(s)) {
+        shinyjs::show(id = "divButton_A2")
+      vis.net.plot(g_results[[2]]$vis_net_A[[s]])
+    } else {
+        shinyjs::hide(id = "divButton_A2")
+    }
+  })
+
+  # inactive 2
+  output$network_I2 <- renderVisNetwork({
+    s = input$results2_inactive_rows_selected
+    if (length(s)) {
+        shinyjs::show(id = "divButton_I2")
+      vis.net.plot(g_results[[2]]$vis_net_I[[s]])
+    } else {
+        shinyjs::hide(id = "divButton_I2")
+    }
   })
 
 }
