@@ -28,7 +28,9 @@ sp_int_A <- lapply(toiintA,to_sp_net_int,gintg.p,nTF,DE_Genes)
 sp_int_I <- lapply(toiintI,to_sp_net_int,gintg.p,nTF,DE_Genes)
 
 #converting to visNetwork
+#list for active intermediates
 vis_net_A <- lapply(sp_int_A,toVisNetworkData)
+#list for inactive intermediates
 vis_net_I <- lapply(sp_int_I,toVisNetworkData)
 
 #for edge color
@@ -48,6 +50,10 @@ all_plots_I[[1]] #displays the plot of rank 1 node in active signaling molecule
 
 #to save network in Sif file for cytoscape
 write.table(vis_net_A[[1]]$edges,paste(toiintA[1],".","sif",sep=""),row.names = F,quote=F)
+
+#plotting the union of all active ints sp networks
+vis.net.plot(vis_plot_union(vis_net_A))
+vis.net.plot(vis_plot_union(vis_net_I))
 
 --------------#ROUGH IGNORE______________________________________________________
 
