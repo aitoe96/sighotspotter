@@ -158,24 +158,6 @@ vis.edge.color <- function(visg){
   return(visg)
 }
 
-<<<<<<< HEAD
-#' Function to plot the Visnetowkr object
-#' @param visg the visnetwork object
-vis.net.plot <- function(visg){
-  #hierarchy
-  visNetwork(visg$nodes,visg$edges) %>% visNodes(visg, shape="box",color="grey") %>% visIgraphLayout(layout = "layout_as_tree",root="NICHE",flip.y = F) %>% visEdges(arrows = "to") %>%  visOptions(highlightNearest = list(enabled =TRUE, degree = 1, hover = T), nodesIdSelection = TRUE)  %>% visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="star", color="blue") %>% visGroups(visg, groupname="upregulated", color = "red",shape="triangle") %>% visGroups(visg, groupname="downregulated", color = "green", shape="triangle") %>% visPhysics(stabilization = FALSE) %>% visEdges(smooth = FALSE)
-}
-
-#' function for plotting a union network
-#' @param visg is the visnetwork graph object
-vis_plot_union <- function(visg){
-  visge=lapply(visg,function(x) x$edges)
-  visgn=lapply(visg,function(x) x$nodes)
-  visgnj=join_all(visgn,by=c("id"),type="full")
-  visgej=join_all(visge,by=c("from","to"),type="full")
-  vis_union_A <- list(nodes=visgnj,edges=visgej)
-}
-=======
 # obsoleted, this function is used from app.R
   # Function to plot the Visnetwork object
   # @param visg the visnetwork object
@@ -190,4 +172,14 @@ vis_plot_union <- function(visg){
     #visPhysics(stabilization = FALSE) %>% visEdges(smooth = FALSE) %>%
     #visExport()
 #}
->>>>>>> ca548d1f1493a9b0408347d2e2bbd528da3efc21
+
+#unused funtion for plotting the entire network
+#' function for plotting a union network
+#' @param visg is the visnetwork graph object
+#vis_plot_union <- function(visg){
+  #visge=lapply(visg,function(x) x$edges)
+  #visgn=lapply(visg,function(x) x$nodes)
+  #visgnj=join_all(visgn,by=c("id"),type="full")
+  #visgej=join_all(visge,by=c("from","to"),type="full")
+  #vis_union_A <- list(nodes=visgnj,edges=visgej)
+#}

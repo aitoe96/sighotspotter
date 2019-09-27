@@ -216,7 +216,8 @@ vis.net.plot <- function(visg){
   visNetwork(visg$nodes,visg$edges) %>% visNodes(visg, shape="box") %>%
     visIgraphLayout(layout = "layout_as_tree",root="NICHE",flip.y = F) %>%
     visEdges(arrows = "to") %>%  visOptions(highlightNearest = list(enabled =TRUE, degree = 1, hover = T), nodesIdSelection = TRUE)  %>%
-    visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="circle") %>%
+    visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="circle",color="blue") %>%
+	visNodes(visg,color="grey") %>%
     visGroups(visg, groupname="upregulated", color = "red",shape="triangle") %>%
     visGroups(visg, groupname="downregulated", color = "green", shape="triangle") %>%
     visPhysics(stabilization = FALSE) %>% visEdges(smooth = FALSE) %>%
@@ -463,11 +464,11 @@ server <- function(input, output, session) {
           withProgress(message = 'Condition 2',  {
             g_results[[2]] <<- SigHotSpotter_pipeline (input$species, rv$cond2_file$datapath, input$cutoff, rv$de_file$datapath, input$pctile, invert_DE = TRUE)
             output$results2_active <- DT::renderDataTable({
-              g_results[[1]]$trimmed_score_A
+              g_results[[2]]$trimmed_score_A
             },server = TRUE, selection = "single")
 
             output$results2_inactive <- DT::renderDataTable({
-              g_results[[1]]$trimmed_score_I
+              g_results[[2]]$trimmed_score_I
             },server = TRUE, selection = "single")
           })
 
