@@ -201,11 +201,23 @@ nonterminal_DE_TFs <- function(g,deg,non_interface_TFs)
   names(nTF)=NULL
   nTF=as.vector(t(nTF))
   nTF<-intersect(nTF,V(g)$name) #Some TFs must still be missing in the final g3
-  if (length(nTF) == 0) stop ('No intermediates found. You may decrease the percentile in order to find intermediates.') # decrease percentile cutoff
+  if (length(nTF) == 0) stop ('No downstream TF found for the cutoff employed. You may decrease the cutoff in order to find TFs.') # decrease percentile cutoff
   nTF
 }
 
-
+#Function of shortlisting non-terminal differentially expressed genes But without stop command for building networks
+#Function for classifying nTF as up or down regulated
+up_down_tfs <- function(g,deg,non_interface_TFs)
+{
+  colnames(deg)=c("Gene","Bool_DEG")
+  non_interface_DE_TFs=join(deg,non_interface_TFs,by=c("Gene"),type="inner") #IF THIS IS ZERO NEED TO ABORT
+  #load non-terminal TFs
+  nTF=non_interface_DE_TFs[1]
+  names(nTF)=NULL
+  nTF=as.vector(t(nTF))
+  nTF<-intersect(nTF,V(g)$name) #Some TFs must still be missing in the final g3
+  nTF
+}
 
 ##Path_weight
 #product_path_weight <- function(path, graph) sum(E(graph, path=path)$weight)/length(path)

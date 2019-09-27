@@ -140,8 +140,8 @@ to_sp_net_int <- function(s,g,t,deg,non_interface_TFs){
   edges_a=lapply(s,shortest_path_edges_all,t,g)
   edges_d=lapply("NICHE",shortest_path_edges_all,c(s),g)
   #classifying up and downregulated TFs
-  up_t=nonterminal_DE_TFs(g,deg[deg$state==1,],non_interface_TFs)
-  down_t=nonterminal_DE_TFs(g,deg[deg$state==-1,],non_interface_TFs)
+  up_t=up_down_tfs(g,deg[deg[2]==1,],non_interface_TFs)
+  down_t=up_down_tfs(g,deg[deg[2]==-1,],non_interface_TFs)
   #subnetwork from SP edges
   sp_sub_net=subgraph.edges(g, c(unlist(edges_a),unlist(edges_d)), delete.vertices = T)
   sp_sub_net=set_vertex_attr(sp_sub_net, "group", index = c(s), value="int")
