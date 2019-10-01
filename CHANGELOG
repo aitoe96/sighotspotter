@@ -6,8 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [0.6] - Current
+### Added
+- Functionality to plot and download networks
+
 ### Changed
 - SigHotSpotter_pipeline: showprogress only when run from within shiny
+- Minor changes in the layout
 
 ## [0.5]
 ### Changed
