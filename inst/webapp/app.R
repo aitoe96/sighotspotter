@@ -21,8 +21,16 @@ analysis_page <- fluidPage(
   introjsUI(), #Needed for take a tour
   h3(textOutput("header", inline=TRUE),
      div(
+
        actionButton("tour","Take a tour"),
        actionButton("restart", "Restart"),
+       br(),
+       br(),
+              introBox(
+                downloadButton("downloadResults", "Download"),
+                data.step = 8,
+                data.intro = "Click to download all the generated results"
+              ),
        class='rightAlign')
      ),
 
@@ -96,13 +104,6 @@ analysis_page <- fluidPage(
                    actionButton("button", "Run"),
                    data.step = 7,
                    data.intro = "Click on Run to start the analysis"
-                 )
-          ),
-          column(6,
-                 introBox(
-                   downloadButton("downloadResults", "Download"),
-                   data.step = 8,
-                   data.intro = "Click to download all the generated results"
                  )
           )
         )
@@ -357,7 +358,7 @@ server <- function(input, output, session) {
 
      # Condition 1
       addWorksheet(wb, 'Condition1')
-      condition <- g_results[[1]]
+      condition <- g_results[[1]]$final_score
       condition$Steady_state <- NULL
       colnames(condition) <- c('Signaling hotspots', 'Compatibility score*')
       condition = rbind(condition, c('', ''))
@@ -366,7 +367,7 @@ server <- function(input, output, session) {
 
      # Condition 2
       addWorksheet(wb, 'Condition2')
-      condition <- g_results[[2]]
+      condition <- g_results[[2]]$final_score
       condition$Steady_state <- NULL
       colnames(condition) <- c('Signaling hotspots', 'Compatibility score*')
       condition = rbind(condition, c('', ''))
