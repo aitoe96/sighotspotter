@@ -217,8 +217,8 @@ vis.net.plot <- function(visg){
   visNetwork(visg$nodes,visg$edges) %>% visNodes(visg, shape="box") %>%
     visIgraphLayout(layout = "layout_as_tree",root="NICHE",flip.y = F) %>%
     visEdges(arrows = "to") %>%  visOptions(highlightNearest = list(enabled =TRUE, degree = 1, hover = T), nodesIdSelection = TRUE)  %>%
-    visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="circle",color="blue") %>%
-	visNodes(visg,color="grey") %>%
+    visEdges(smooth = T) %>% visGroups(visg, groupname="int", shape="circle",color=list(background = "lightblue",border = "darkblue"),shadow = list(enabled = TRUE)) %>%
+	  visNodes(visg,color="grey") %>%
     visGroups(visg, groupname="upregulated", color = "red",shape="triangle") %>%
     visGroups(visg, groupname="downregulated", color = "green", shape="triangle") %>%
     visPhysics(stabilization = FALSE) %>% visEdges(smooth = FALSE) %>%
