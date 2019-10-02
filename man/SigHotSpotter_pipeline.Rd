@@ -20,7 +20,7 @@ SigHotSpotter_pipeline(species, input_data, cutoff, DE_Genes_data,
 
 \item{invert_DE}{If the differential expression should be inverted, default = FALSE}
 
-\item{showprogress}{shows progress bar if TRUE, set it to FALSE in batch mode, default = TRUE}
+\item{showprogress}{shows progress bar in shiny app if set to TRUE, set it to FALSE in batch mode without GUI, default = TRUE}
 }
 \value{
 Compatibility scores

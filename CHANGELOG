@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.5] - Current
+
+## [0.6] - Current
+### Added
+- Functionality to plot and download networks
+
+### Changed
+- SigHotSpotter_pipeline: showprogress only when run from within shiny
+- Minor changes in the layout
+
+## [0.5]
 ### Changed
 - Renamed software: SigHotSpotter
 

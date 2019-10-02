@@ -8,13 +8,13 @@
 #' @param DE_Genes_data Differential expression dataset (1 for up-regulated, -1 for down-regulated genes)
 #' @param percentile Predicted intermediates are taken into account above this threshold
 #' @param invert_DE If the differential expression should be inverted, default = FALSE
-#' @param showprogress shows progress bar if TRUE, set it to FALSE in batch mode, default = TRUE
+#' @param showprogress shows progress bar in shiny app if set to TRUE, set it to FALSE in batch mode without GUI, default = TRUE
 #' @return Compatibility scores
 #' @export
 SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, percentile, invert_DE = FALSE, showprogress = TRUE)
 {
   ## Import necessary libraries
-  library(SigHotSpotter)
+  #library(SigHotSpotter)
   library(plyr)
   library(igraph)
   library(Matrix)
@@ -33,6 +33,12 @@ SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, p
     } else {
       stop("Only the following species are supported: 'MOUSE', 'HUMAN'")
     }
+  }
+  ## Checking if showprogress is needed
+  #FIXME: is showprogress even necessary?
+  if(showprogress && !shiny::isRunning()){
+    showprogress = FALSE
+    warning('Can not show progress without the shiny environment.')
   }
 
   ## Load the data
@@ -92,5 +98,40 @@ SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, p
   score_m=(matrix(unlist(score), ncol=length(score), byrow=F))
   score_m_means=as.list(rowMeans(score_m))
   final_score=compatability_score(score_m_means,Steady_state_true,int)
-  return(final_score)
+
+  ## Computing networks for visualization
+  if(showprogress){
+    incProgress()
+    setProgress(detail = "Computing networks")
+  }
+
+  trimmed_score_I=.trimResults(final_score,F)
+  trimmed_score_A=.trimResults(final_score,T)
+  toiintI=c(as.matrix(trimmed_score_I$`Inactive signaling hotspots`))
+  toiintA=c(as.matrix(trimmed_score_A$`Active signaling hotspots`))
+  twoi=c(toiintI,toiintA)
+
+  #pruning the integrated networks
+  gintg.p=prun.int.g(gintg)
+
+  #building networks for all intermediates for active signaling hotspots
+  sp_int_A <- lapply(toiintA,to_sp_net_int,gintg.p,nTF,DE_Genes,non_interface_TFs)
+
+  #building networks for inactive signaling hotspots
+  sp_int_I <- lapply(toiintI,to_sp_net_int,gintg.p,nTF,DE_Genes,non_interface_TFs)
+
+  #converting to visNetwork
+  vis_net_A <- lapply(sp_int_A,toVisNetworkData)
+  vis_net_I <- lapply(sp_int_I,toVisNetworkData)
+
+  #for edge color
+  vis_net_A <- lapply(vis_net_A,vis.edge.color)
+  vis_net_I <- lapply(vis_net_I,vis.edge.color)
+
+  ret_value = list(final_score=final_score,
+                   trimmed_score_A=trimmed_score_A,
+                   trimmed_score_I=trimmed_score_I,
+                   vis_net_A=vis_net_A,
+                   vis_net_I=vis_net_I )
+  return(ret_value)
 }

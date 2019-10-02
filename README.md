@@ -37,7 +37,7 @@ install_git("https://gitlab.com/srikanth.ravichandran/sighotspotter")
 This will install all the package dependencies as well as the SigHotSpotter package, it takes about 3 minutes.
 If the install would fail because the dependencies can not be installed, you can install the dependencies before installing the package by typing:
 ```R
-install.packages( c("plyr", "igraph", "Matrix", "reshape2", "RSpectra", "dplyr", "snow", "shiny", "DT", "shinyjs", "shinythemes", "shinyBS", "rintrojs", "openxlsx", "markdown") )
+install.packages( c("plyr", "igraph", "Matrix", "reshape2", "RSpectra", "dplyr", "snow", "shiny", "DT", "shinyjs", "shinythemes", "shinyBS", "rintrojs", "openxlsx", "markdown", "visNetwork") )
 ```
 Takes about 3-5 minutes to install.
 
