@@ -52,12 +52,12 @@ edge_shortest <- function(path, graph)
 
   res_trimmed = results[,1:2]
   if (active){
-    res_trimmed <- head(res_trimmed, 10L)
+    #res_trimmed <- head(res_trimmed, 10L)
     res_trimmed <- res_trimmed[res_trimmed[,2]>0.5,]
     colnames(res_trimmed) <- c('Active signaling hotspots', 'Compatibility score')
   } else
   {
-    res_trimmed <- tail(res_trimmed, 10L)
+    #res_trimmed <- tail(res_trimmed, 10L)
     res_trimmed <- res_trimmed[res_trimmed[,2]<0.5,]
     colnames(res_trimmed) <- c('Inactive signaling hotspots', 'Compatibility score')
     res_trimmed <- res_trimmed[order(res_trimmed$'Compatibility score'),]
@@ -70,10 +70,15 @@ edge_shortest <- function(path, graph)
 #making the edge weight non-negative and taking the absolute
 prun.int.g <- function(g){
   E(g)$weight=1-(abs(E(g)$weight))
+  
   #function to delet edges from tf to dummy un the network
-  del=incident(g, "Dummy", mode = c("in"))
-  g <- delete.edges(g,del)
-  g <- set.vertex.attribute(g,"name","Dummy","NICHE")
+  del <- tryCatch(incident(g, "Dummy", mode = "in"), error = function(e) NULL) 
+  
+  if (!is.null(del)) { 
+    g <- delete.edges(g, del) 
+    g <- set.vertex.attribute(g,"name","Dummy","NICHE")
+  } 
+  
   return(g)
 }
 
@@ -138,12 +143,19 @@ to_sp_net_int <- function(s,g,t,deg,non_interface_TFs){
   #g <- delete.edges(g,del)
   #Shortest path edges
   edges_a=lapply(s,shortest_path_edges_all,t,g)
-  edges_d=lapply("NICHE",shortest_path_edges_all,c(s),g)
+  #edges_d=lapply("NICHE",shortest_path_edges_all,c(s),g)
+  
+  edges_d = tryCatch(lapply("NICHE",shortest_path_edges_all,c(s),g), error = function(e) NULL) 
+  
   #classifying up and downregulated TFs
   up_t=up_down_tfs(g,deg[deg[2]==1,],non_interface_TFs)
   down_t=up_down_tfs(g,deg[deg[2]==-1,],non_interface_TFs)
+  
   #subnetwork from SP edges
-  sp_sub_net=subgraph.edges(g, c(unlist(edges_a),unlist(edges_d)), delete.vertices = T)
+  if (!is.null(edges_d)) { 
+    sp_sub_net=subgraph.edges(g, c(unlist(edges_a),unlist(edges_d)), delete.vertices = T)
+  } 
+  sp_sub_net=subgraph.edges(g, c(unlist(edges_a)), delete.vertices = T)
   sp_sub_net=set_vertex_attr(sp_sub_net, "group", index = c(s), value="int")
   sp_sub_net=set_vertex_attr(sp_sub_net, "group", index = c(up_t), value="upregulated")
   sp_sub_net=set_vertex_attr(sp_sub_net, "group", index = c(down_t), value="downregulated")
