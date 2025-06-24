@@ -56,10 +56,6 @@ shiny::runApp(paste(find.package("SigHotSpotter"), "webapp", "app.R", sep = .Pla
 
 This will open the graphical user interface locally
 
-### Web interface
-An online web interface of the SigHotSpotter application (SOFTWARE for short) is accessible at
-[https://sighotspotter.lcsb.uni.lu](https://sighotspotter.lcsb.uni.lu), and is provided free of charge for academic, non-profit use.
-Using the SOFTWARE means you accept the terms and conditions of the Disclaimer below.
 
 ### Application walkthrough
 
