@@ -23,6 +23,7 @@ SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, p
   library(RSpectra)
   library(dplyr)
   library(snow)
+  library(visNetwork)
 
   ## Choose correct dataset according to species
   if(species == "MOUSE"){
@@ -132,6 +133,7 @@ SigHotSpotter_pipeline <- function(species, input_data, cutoff, DE_Genes_data, p
                    trimmed_score_A=trimmed_score_A,
                    trimmed_score_I=trimmed_score_I,
                    vis_net_A=vis_net_A,
-                   vis_net_I=vis_net_I )
+                   vis_net_I=vis_net_I,
+                   complete = gintg.p)
   return(ret_value)
 }
