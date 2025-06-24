@@ -14,6 +14,9 @@ This software was developed in the [Computational Biology Group](https://wwwfr.u
 - [Andras Hartmann](https://wwwfr.uni.lu/lcsb/people/andras_hartmann)
 - [Antonio del Sol](https://wwwfr.uni.lu/lcsb/people/antonio_del_sol_mesa)
 
+This is a **modified version** made in 2025 by: 
+- [**Aitor Martínez Pérez**](https://www.cicbiogune.es/people/amperez)
+
 ## System requirements 
 ### Hardware requirements
 There are no special hardware requirements, the tool was tested on a virtual machine with 4GB of memory, a 4 core Intel Xeon 2.5 GHz, and 50 GB allocated space on a hard disk. 
@@ -30,8 +33,7 @@ The web interface depends on shiny webserver (deployed on version 1.5.9.923), al
 From an `RStudio` terminal, type: 
 
 ```R
-require("devtools")
-install_git("https://gitlab.com/srikanth.ravichandran/sighotspotter")
+remotes::install_github('aitoe96/sighotspotter')
 ```
 
 This will install all the package dependencies as well as the SigHotSpotter package, it takes about 3 minutes.
